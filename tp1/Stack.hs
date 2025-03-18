@@ -32,6 +32,7 @@ holdsS (Sta (p:ps) capacidad) palet ruta    | (inRouteR ruta (destinationP palet
                                             | otherwise = False
 
 popS :: Stack -> String -> Stack          -- quita del tope los paletes con destino en la ciudad indicada
+popS (Sta [] capacidad) _ = (Sta [] capacidad)
 popS (Sta (p:ps) capacidad) destino | destinationP p /= destino = (Sta (p:ps) capacidad)
                                     | otherwise = popS (Sta ps capacidad) destino
 

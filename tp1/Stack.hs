@@ -19,14 +19,29 @@ stackS (Sta pila capacidad) palet | freeCellsS (Sta pila capacidad)  > 0 = (Sta 
                                     | otherwise = (Sta pila capacidad)
 -- Esta creando un nuevo stack sin modificar el anterior. 
 -- Habria agregar el palet al mismo stack o se puede borrar el viejo y quedarse con el nuevo?
+-- stackS deberia usar holdsS para ver que el palet no se baje despues que alguno?
 
 
 netS :: Stack -> Int                      -- responde el peso neto de los paletes en la pila
 netS (Sta [] _) = 0
---netS (Sta (pila) _) = foldr (\x (Pal _ peso) -> (x+peso)) 0 pila
---netS (Sta (pila) _) = foldr (+) 0 pila
-netS (Sta (p:ps) _) = 
---netS (Sta pila  _) = foldr
+netS (Sta (p:ps) capacidad) = netP p + netS (Sta ps capacidad)
 
---holdsS :: Stack -> Palet -> Route -> Bool -- indica si la pila puede aceptar el palet considerando las ciudades en la ruta
---popS :: Stack -> String -> Stack          -- quita del tope los paletes con destino en la ciudad indicada
+holdsS :: Stack -> Palet -> Route -> Bool -- indica si la pila puede aceptar el palet considerando las ciudades en la ruta
+holdsS (Sta [] _) _ _ = True
+holdsS (Sta (p:ps) capacidad) palet ruta    | (inRouteR ruta (destinationP palet) == True) && (inOrderR ruta (destinationP palet) (destinationP p)) = holdsS (Sta ps capacidad) palet ruta
+                                            | otherwise = False
+
+popS :: Stack -> String -> Stack          -- quita del tope los paletes con destino en la ciudad indicada
+popS (Sta (p:ps) capacidad) destino | destinationP p /= destino = (Sta last (p:ps) capacidad)
+                                    | otherwise = pop
+
+
+
+p = newP "bsas" 4
+p2 = newP "tigre" 8
+p3 = newP "belgrano" 2
+
+s = newS 3
+
+r = newR ["bsas", "lujan", "tigre", "CABA", "tucuman"]
+

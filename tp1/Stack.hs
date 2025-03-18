@@ -1,7 +1,7 @@
 
 
---module Stack ( Stack, newS, freeCellsS, stackS, netS, holdsS, popS )
---  where
+module Stack ( Stack, newS, freeCellsS, stackS, netS, holdsS, popS )
+  where
 
 import Palet
 import Route
@@ -15,7 +15,7 @@ freeCellsS :: Stack -> Int                -- responde la celdas disponibles en l
 freeCellsS (Sta pila capacidad) = capacidad - length pila
 
 stackS :: Stack -> Palet -> Stack         -- apila el palet indicado en la pila
-stackS (Sta pila capacidad) palet | freeCellsS (Sta pila capacidad)  > 0 = (Sta (pila++[palet]) capacidad)
+stackS (Sta pila capacidad) palet | freeCellsS (Sta pila capacidad)  > 0 = (Sta ([palet]++pila) capacidad)
                                     | otherwise = (Sta pila capacidad)
 -- Esta creando un nuevo stack sin modificar el anterior. 
 -- Habria agregar el palet al mismo stack o se puede borrar el viejo y quedarse con el nuevo?
@@ -32,8 +32,8 @@ holdsS (Sta (p:ps) capacidad) palet ruta    | (inRouteR ruta (destinationP palet
                                             | otherwise = False
 
 popS :: Stack -> String -> Stack          -- quita del tope los paletes con destino en la ciudad indicada
-popS (Sta (p:ps) capacidad) destino | destinationP p /= destino = (Sta last (p:ps) capacidad)
-                                    | otherwise = pop
+popS (Sta (p:ps) capacidad) destino | destinationP p /= destino = (Sta (p:ps) capacidad)
+                                    | otherwise = popS (Sta ps capacidad) destino
 
 
 
@@ -44,4 +44,7 @@ p3 = newP "belgrano" 2
 s = newS 3
 
 r = newR ["bsas", "lujan", "tigre", "CABA", "tucuman"]
+
+s2 = stackS s p2
+s3 = stackS s2 p
 

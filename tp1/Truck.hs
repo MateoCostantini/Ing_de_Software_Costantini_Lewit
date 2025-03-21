@@ -1,5 +1,5 @@
---module Truck ( Truck, newT, freeCellsT, loadT, unloadT, netT )
---  where
+module Truck ( Truck, newT, freeCellsT, loadT, unloadT, netT )
+ where
 
 import Palet
 import Stack
@@ -32,11 +32,11 @@ changeStackT i pila (p:ps) = p:changeStackT (i-1) pila ps
 
 
 loadT :: Truck -> Palet -> Truck      -- carga un palet en el camion
---loadT (Tru bahias ruta) palet | freeCellsT (Tru bahias ruta) = Tru [ if freeCellsS pila  && (netS pila) + (netP palet) <= 10 && holdsS pila palet ruta then stackS pila palet else pila | pila <- bahias] ruta
---loadT (Tru bahias ruta) = foldr (\x acc -> (f x) : acc) []
-loadT (Tru bahias ruta) palet   | indice == -1 = (Tru bahias ruta)
+loadT (Tru bahias ruta) palet   | indice == -1 = error "No se pudo cargar el palet, no hay una bahia compatible disponible."
                                 | otherwise = Tru (changeStackT indice (stackS (bahias !! indice) palet) bahias) ruta
                                 where indice = findFreeStackT (Tru bahias ruta) palet 0
+-- Decidimos atrapar el error en esta funcion y hacer que findFreeStackT retorne -1 para facilitar el entendimiento del codigo y las funciones
+                            
 
 -- que haya lugares libres
 -- que no supere el peso (netS)
@@ -62,11 +62,11 @@ p = newP "bsas" 4
 p2 = newP "tigre" 8
 p3 = newP "belgrano" 2
 p4 = newP "lujan" 1
-
+p5 = newP "bsas" 2
 s = newS 3
 
 r = newR ["bsas", "lujan", "tigre", "CABA", "tucuman"]
-t = newT 4 3 r
+t = newT 1 3 r
 
 s2 = stackS s p2
 s3 = stackS s2 p

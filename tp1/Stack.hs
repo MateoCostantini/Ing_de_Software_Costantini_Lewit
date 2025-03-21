@@ -16,7 +16,9 @@ freeCellsS (Sta pila capacidad) = capacidad - length pila
 
 stackS :: Stack -> Palet -> Stack         -- apila el palet indicado en la pila
 stackS (Sta pila capacidad) palet | freeCellsS (Sta pila capacidad)  > 0 = (Sta ([palet]++pila) capacidad)
-                                    | otherwise = (Sta pila capacidad)
+                                    | otherwise = error "No se puede apilar en el stack por capacidad del stack" 
+-- Teoricamente, por como esta implementado el codigo, nunca llamariamos a stackS para apilar en un stack donde no es valido. La excepcion es para verificar el funcionamiento.
+
 -- Esta creando un nuevo stack sin modificar el anterior. 
 -- Habria agregar el palet al mismo stack o se puede borrar el viejo y quedarse con el nuevo?
 -- stackS deberia usar holdsS para ver que el palet no se baje despues que alguno?

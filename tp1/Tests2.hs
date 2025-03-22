@@ -194,9 +194,6 @@ tests_loadT =
 
 testsTruck = concat [tests_freeCellsT, tests_loadT]--, tests_unloadT, tests_netT]
 
---------------------------------------------------
--- RUNNING TESTS
---------------------------------------------------
 
 tests = concat [testsPalet, testsRoute, testsStack, testsTruck]
 

@@ -18,11 +18,13 @@ freeCellsT (Tru bahias _) = foldr (+) 0 [freeCellsS pila | pila <- bahias]
 
 findFreeStackT :: Truck -> Palet -> Int -> Int
 findFreeStackT (Tru bahias ruta) palet i    | length bahias <= i = -1
-                                       | freeCellsS (bahias !! i) > 0
-                                       && (netS (bahias !! i)) + (netP palet) <= 10 
-                                       && holdsS (bahias !! i) palet ruta 
-                                       = i
-                                       | otherwise = findFreeStackT (Tru bahias ruta) palet (i+1)
+                                            | (freeCellsS pila > 0
+                                              && netS pila + netP palet <= 10
+                                              && holdsS pila palet ruta )
+                                              = i
+                                            | otherwise = findFreeStackT (Tru bahias ruta) palet (i + 1)
+                                                where
+                                                    pila = bahias !! i
 
 
 changeStackT :: Int -> Stack -> [Stack] -> [Stack]

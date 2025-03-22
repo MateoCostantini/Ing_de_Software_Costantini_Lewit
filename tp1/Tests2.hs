@@ -20,6 +20,8 @@ testF action = unsafePerformIO $ do
 
 paletBsas    = newP "bsas" 4
 paletTigre   = newP "tigre" 8
+paletTigre2   = newP "tigre" 2
+paletTigre3   = newP "tigre" 1
 paletBelgrano= newP "belgrano" 2
 paletLujan   = newP "lujan" 1
 paletLujan2  = newP "lujan" 3
@@ -63,17 +65,23 @@ stackPopVacio = popS stackVacio "CABA"
 
 
 -- emprolijar/usar lo anterior
+truckVacio = newT 4 10 ruta1
 
 truckUnaBahia = newT 1 3 ruta1
 truckMultiplesBahias = newT 4 3 ruta1
 truckCargado1 = loadT truckMultiplesBahias paletTigre
 
-truckCargado2 = loadT (loadT truckUnaBahia paletCABA1) paletLujan
+truckCargado2 = loadT (loadT truckUnaBahia paletCABA1) paletTigre2
+truckLleno = loadT truckCargado2 paletLujan
+truckIntentoSobrecargar = loadT truckLleno paletBsas
+
+truckSobrePeso = loadT truckCargado2 paletTigre
 
 truckRutaRepetida = loadT (loadT (newT 1 10 rutaRepetida) paletLujan) paletTigre
 truckPalRutaRepetidaPermitida = loadT truckRutaRepetida paletLujan2 -- me deberia dejar
-truckPalNoPermitido = loadT truckRutaRepetida paletCABA1 -- me deberia dejar
+truckCiudadNoPermitida = loadT truckRutaRepetida paletCABA1 -- no me deberia dejar
 
+truckPalMismasCiuDistintasBahias = loadT (loadT (loadT (newT 2 2 ruta1) paletTucuman) paletTigre2) paletTigre3
 
 -- t3 = loadT t2 p2
 -- t4 = loadT t3 p4
@@ -172,27 +180,33 @@ tests_freeCellsT =
 
 tests_loadT = 
     [ freeCellsT truckCargado2 == (freeCellsT truckUnaBahia) -2
-    --, freeCellsT truckPalRutaRepetidaPermitida == 7
-    , testF (freeCellsT truckPalNoPermitido)
+    , testF (freeCellsT truckSobrePeso)
+    , freeCellsT truckPalRutaRepetidaPermitida == 7 -- esta deberia funcionar pero esta mal implementado inOrder
+    , testF (freeCellsT truckCiudadNoPermitida)
     , testF (loadT truckUnaBahia paletFake)
+    , freeCellsT truckLleno == 0
+    , testF (truckIntentoSobrecargar)
+    
     -- problema en el caso en que tenga la ruta lujan-tigre-lujan: si ya tengo un palet de lujan
     -- entonces cuanod quiera agregar uno de tigre no me va a dejar xq esta lujan antes en la lista
     -- de rutas. Y deber'ia dejarme.
     ]
 
--- tests_unloadT =
---     [ netT truckDescargado < netT truckCargado4  -- sacó al menos un pallet
---     , netT truckDescargado2 < netT truckDescargado
---     , netT truckDescargado3 == netT truckDescargado2 -- no cambia si ciudad no está
---     ]
+tests_unloadT =
+    [ freeCellsT (unloadT truckCargado1 "CABA") == (freeCellsT truckCargado1) +1
+    , freeCellsT (unloadT truckCargado1 "tigre") == freeCellsT truckCargado1
+    , freeCellsT (unloadT truckPalMismasCiuDistintasBahias "tigre") == (freeCellsT truckPalMismasCiuDistintasBahias) +2
+    , freeCellsT (unloadT truckPalMismasCiuDistintasBahias "ciudadInexistente") == freeCellsT truckPalMismasCiuDistintasBahias
+    ]
 
 
--- tests_netT = 
---     [
+tests_netT = 
+    [ netT truckVacio == 0
+    , netT truckCargado1 == netP paletTigre
+    , netT truckCargado2 == netP paletCABA1 + netP paletTigre2
+    ]
 
---     ]
-
-testsTruck = concat [tests_freeCellsT, tests_loadT]--, tests_unloadT, tests_netT]
+testsTruck = concat [tests_freeCellsT, tests_loadT, tests_unloadT, tests_netT]
 
 
 tests = concat [testsPalet, testsRoute, testsStack, testsTruck]

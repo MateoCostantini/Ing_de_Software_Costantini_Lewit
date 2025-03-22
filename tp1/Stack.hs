@@ -29,7 +29,7 @@ netS (Sta [] _) = 0
 netS (Sta (p:ps) capacidad) = netP p + netS (Sta ps capacidad)
 
 holdsS :: Stack -> Palet -> Route -> Bool -- indica si la pila puede aceptar el palet considerando las ciudades en la ruta
-holdsS (Sta [] _) _ _ = True
+holdsS (Sta [] _) palet ruta | inRouteR ruta (destinationP palet) == True = True
 holdsS (Sta (p:ps) capacidad) palet ruta    | (inRouteR ruta (destinationP palet) == True) && (inOrderR ruta (destinationP palet) (destinationP p)) = holdsS (Sta ps capacidad) palet ruta
                                             | otherwise = False
 

@@ -21,22 +21,20 @@ inOrderR (Rou cities) cityQuery citySearch
     | not (elem cityQuery cities) = False
     | not (elem citySearch cities) = True
     | otherwise = firstOccurrence cities cityQuery < lastOccurrence cities citySearch
-  where
-    -- Devuelve el índice de la primera ocurrencia de la ciudad.
-    firstOccurrence :: [String] -> String -> Int
-    firstOccurrence [] _ = error "La ciudad no está en la ruta."
-    firstOccurrence (c:cs) city
-         | c == city = 0
-         | otherwise = 1 + firstOccurrence cs city
+  
+firstOccurrence :: [String] -> String -> Int
+firstOccurrence [] _ = error "La ciudad no está en la ruta."
+firstOccurrence (c:cs) city
+      | c == city = 0
+      | otherwise = 1 + firstOccurrence cs city
 
-    -- Devuelve el índice de la última ocurrencia de la ciudad.
-    lastOccurrence :: [String] -> String -> Int
-    lastOccurrence cities city = lastOccurrenceAux cities city 0 (-1)
-      where
-         lastOccurrenceAux [] _ _ current = current
-         lastOccurrenceAux (c:cs) city idx current
-              | c == city = lastOccurrenceAux cs city (idx+1) idx
-              | otherwise = lastOccurrenceAux cs city (idx+1) current
+lastOccurrence :: [String] -> String -> Int
+lastOccurrence cities city = lastOccurrenceAux cities city 0 (-1)
+  where
+      lastOccurrenceAux [] _ _ current = current
+      lastOccurrenceAux (c:cs) city idx current
+          | c == city = lastOccurrenceAux cs city (idx+1) idx
+          | otherwise = lastOccurrenceAux cs city (idx+1) current
 
 
 inRouteR :: Route -> String -> Bool -- indica si la ciudad consultada está en la ruta

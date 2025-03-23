@@ -77,7 +77,7 @@ truckIntentoSobrecargar = loadT truckLleno paletBsas
 
 truckSobrePeso = loadT truckCargado2 paletTigre
 
-truckRutaRepetida = loadT (loadT (newT 1 10 rutaRepetida) paletLujan) paletTigre
+truckRutaRepetida = loadT (loadT (newT 1 10 rutaRepetida) paletLujan) paletTigre2
 truckPalRutaRepetidaPermitida = loadT truckRutaRepetida paletLujan2 -- me deberia dejar
 truckCiudadNoPermitida = loadT truckRutaRepetida paletCABA1 -- no me deberia dejar
 
@@ -193,8 +193,8 @@ tests_loadT =
     ]
 
 tests_unloadT =
-    [ freeCellsT (unloadT truckCargado1 "CABA") == (freeCellsT truckCargado1) +1
-    , freeCellsT (unloadT truckCargado1 "tigre") == freeCellsT truckCargado1
+    [ freeCellsT (unloadT truckCargado1 "tigre") == (freeCellsT truckCargado1) +1
+    , freeCellsT (unloadT truckCargado1 "CABA") == freeCellsT truckCargado1
     , freeCellsT (unloadT truckPalMismasCiuDistintasBahias "tigre") == (freeCellsT truckPalMismasCiuDistintasBahias) +2
     , freeCellsT (unloadT truckPalMismasCiuDistintasBahias "ciudadInexistente") == freeCellsT truckPalMismasCiuDistintasBahias
     ]
@@ -209,7 +209,7 @@ tests_netT =
 testsTruck = concat [tests_freeCellsT, tests_loadT, tests_unloadT, tests_netT]
 
 
-tests = concat [testsPalet, testsRoute, testsStack, testsTruck]
+tests = foldr (&&) True (concat [testsPalet, testsRoute, testsStack, testsTruck])
 
 
 

@@ -6,13 +6,6 @@ data Route = Rou [ String ] deriving (Eq, Show)
 
 newR :: [ String ] -> Route                    -- construye una ruta segun una lista de ciudades
 newR cities = Rou cities
--- Como hacer para que si o si sea una lista lo que reciba
-
--- inOrderR :: Route -> String -> String -> Bool  -- indica si la primer ciudad consultada esta antes que la segunda ciudad en la ruta
--- inOrderR (Rou []) _ _ = error "La ciudad consultada no esta en la ruta."  
--- inOrderR (Rou (c:cs)) cityQuery citySearch  | c == cityQuery = True
---                                             | c == citySearch = False
---                                             | otherwise = inOrderR (Rou cs) cityQuery citySearch 
 
 inOrderR :: Route -> String -> String -> Bool  
 inOrderR (Rou cities) cityQuery citySearch  | null cities               = error "La ruta está vacía."

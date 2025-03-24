@@ -17,11 +17,8 @@ freeCellsS (Sta pila capacidad) = capacidad - length pila
 stackS :: Stack -> Palet -> Stack         -- apila el palet indicado en la pila
 stackS (Sta pila capacidad) palet | freeCellsS (Sta pila capacidad)  > 0 = (Sta ([palet]++pila) capacidad)
                                     | otherwise = error "No se puede apilar en el stack por capacidad del stack" 
--- Teoricamente, por como esta implementado el codigo, nunca llamariamos a stackS para apilar en un stack donde no es valido. La excepcion es para verificar el funcionamiento.
-
--- Esta creando un nuevo stack sin modificar el anterior. 
--- Habria agregar el palet al mismo stack o se puede borrar el viejo y quedarse con el nuevo?
--- stackS deberia usar holdsS para ver que el palet no se baje despues que alguno?
+-- Teoricamente, por como esta implementado el codigo, nunca llamariamos a stackS para apilar en un stack donde no es valido. 
+-- La excepcion es para verificar el funcionamiento.
 
 
 netS :: Stack -> Int                      -- responde el peso neto de los paletes en la pila
@@ -37,17 +34,3 @@ popS :: Stack -> String -> Stack          -- quita del tope los paletes con dest
 popS (Sta [] capacidad) _ = (Sta [] capacidad)
 popS (Sta (p:ps) capacidad) destino | destinationP p /= destino = (Sta (p:ps) capacidad)
                                     | otherwise = popS (Sta ps capacidad) destino
-
-
-
-p = newP "bsas" 4
-p2 = newP "tigre" 8
-p3 = newP "belgrano" 2
-
-s = newS 3
-
-r = newR ["bsas", "lujan", "tigre", "CABA", "tucuman"]
-
-s2 = stackS s p2
-s3 = stackS s2 p
-

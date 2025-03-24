@@ -11,4 +11,3 @@ destinationP (Pal city _) = city
 
 netP :: Palet -> Int             -- responde el peso en toneladas del palet
 netP (Pal _ weight) = weight
-

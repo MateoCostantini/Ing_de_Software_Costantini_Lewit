@@ -1,55 +1,36 @@
 package anillo;
+import java.util.Stack;
+
 
 public class Ring {
-    private Object cargo;
-    private Ring nextRing;
-    private Ring prevRing;
+    private Eslabon actualEslabon;
+    protected Stack<Eslabon> stack;
 
+    public Ring(){
+        actualEslabon = new NullEslabon();
+        stack = new Stack<>();
+        stack.push(actualEslabon);
+    }
 
     public Ring next() {
-        if ( nextRing == null ) {
-            throw new RuntimeException("Ring is empty");
-        }
-        return nextRing;
+        actualEslabon = actualEslabon.next();
+        return this;
     }
 
     public Object current() {
-        if ( nextRing == null ) {
-            throw new RuntimeException("Ring is empty");
-        }
-        return cargo;
+        return actualEslabon.current();
     }
 
     public Ring add( Object cargo ) {
-        if ( nextRing == null ) {
-            this.cargo = cargo;
-            this.nextRing = this;
-            this.prevRing = this;
-        }
-        else {
-            Ring newRing = new Ring();
-            newRing.cargo = cargo;
-            newRing.nextRing = this;
-            this.prevRing.nextRing = newRing;
-            newRing.prevRing = this.prevRing;
-            this.prevRing = newRing;
-            return newRing;
-        }
+        actualEslabon = actualEslabon.add(cargo);
+        stack.push(actualEslabon);
         return this;
     }
 
     public Ring remove() {
-        if ( nextRing == null ) {
-            throw new RuntimeException("Ring is empty");
-        } else if (nextRing == this) {
-            nextRing = null;
-            prevRing = null;
-            cargo = null;
-        } else {
-            prevRing.nextRing = this.nextRing;
-            nextRing.prevRing = this.prevRing;
-
-        }
-        return nextRing;
+        actualEslabon = stack.pop().remove(actualEslabon);
+        actualEslabon = stack.peek().redefineActualEslabon(actualEslabon);
+        return this;
     }
 }
+

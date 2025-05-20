@@ -1,6 +1,6 @@
 package Uno;
 
-public class Carta {
+public abstract class Carta {
     //Boolean abstract validar();
 
     public String getColor(){
@@ -10,63 +10,14 @@ public class Carta {
     public int getNumero(){
         throw new RuntimeException("Esta carta no tiene numero");
     }
+
+    public Uno aplicarCarta(Uno uno) { return uno; };
+
+    @Override
+    public abstract boolean equals(Object o);
+
+    @Override
+    public abstract int hashCode();
 }
 
-class CartaNumerada extends Carta{
-    int numero;
-    String color;
 
-    public CartaNumerada(int unNumero, String unColor){
-        numero = unNumero;
-        color = unColor;
-    }
-
-    public String getColor(){
-        return color;
-    }
-
-    public int getNumero(){
-        return numero;
-    }
-
-}
-
-class CartaTomaDos extends Carta{
-    String color;
-
-    public CartaTomaDos(String unColor){
-        color = unColor;
-    }
-
-    public String getColor(){
-        return color;
-    }
-}
-
-class CartaReversa extends Carta{
-    String color;
-
-    public CartaReversa(String unColor){
-        color = unColor;
-    }
-
-    public String getColor(){
-        return color;
-    }
-}
-
-class CartaSalta extends Carta{
-    String color;
-
-    public CartaSalta(String unColor){
-        color = unColor;
-    }
-
-    public String getColor(){
-        return color;
-    }
-}
-
-class CartaComodin extends Carta{
-
-}

@@ -3,30 +3,13 @@ package Uno;
 import java.util.HashSet;
 import java.util.List;
 
-public abstract class Jugador {
-    public abstract String getNombre();
-    public abstract boolean tieneCarta(Carta carta);
-
-
-    //void abstract jugar();
-
-}
-
-class JugadorVacio extends Jugador{
-    public String getNombre() {
-        return "Vacio"; // no se si iria asi
-    }
-
-    public boolean tieneCarta(Carta carta){
-        return false;
-    }
-}
-
-class JugadorReal extends Jugador{
+public class Jugador {
     String nombre;
     HashSet<Carta> cartasEnMano = new HashSet<>();
+    Jugador derecha;
+    Jugador izquierda;
 
-    public JugadorReal(String nombre, List<Carta> cartas){
+    public Jugador(String nombre, List<Carta> cartas){
         this.nombre = nombre;
         cartasEnMano.addAll(cartas);
     }
@@ -40,4 +23,7 @@ class JugadorReal extends Jugador{
     }
 
 
+    public int cantidadCartas(){
+        return cartasEnMano.size();
+    }
 }

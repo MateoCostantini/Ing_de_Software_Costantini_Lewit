@@ -8,20 +8,48 @@ public class Uno {
     Stack<Carta> pozo = new Stack<>();
     List<Jugador> jugadores = new ArrayList<>();
     Jugador jugadorActual;
+    List<Carta> mazo;
 
     public Uno(List<Carta> mazo, List<String> jugadores, int cantidadCartas){
         if (jugadores.size() < 2){
             throw new RuntimeException("La partida debe tener 2 o mas jugadores");
         }
+
+        List<Carta> cartasPrimerJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
+        mazo.subList(0, cantidadCartas).clear();
+        Jugador primerJugador = new Jugador(jugadores.removeFirst(), cartasPrimerJugador);
+        this.jugadores.add(primerJugador);
+        jugadorActual = primerJugador;
+
+        List<Carta> cartasSegundoJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
+        mazo.subList(0, cantidadCartas).clear();
+        Jugador segundoJugador = new Jugador(jugadores.removeFirst(), cartasSegundoJugador);
+        this.jugadores.add(segundoJugador);
+        jugadorActual.derecha = segundoJugador;
+        jugadorActual.izquierda = segundoJugador;
+        segundoJugador.izquierda = jugadorActual;
+        segundoJugador.derecha = jugadorActual;
+        jugadorActual = segundoJugador;
+
         for(String jugador:jugadores){
             List<Carta> cartasJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
             mazo.subList(0, cantidadCartas).clear();
-            this.jugadores.add(new JugadorReal(jugador, cartasJugador));
+
+            Jugador nuevoJugador = new Jugador(jugador, cartasJugador);
+            this.jugadores.add(nuevoJugador);
+
+            jugadorActual.derecha = nuevoJugador;
+            primerJugador.izquierda = nuevoJugador;
+            nuevoJugador.derecha = primerJugador;
+            nuevoJugador.izquierda = jugadorActual;
+
+            jugadorActual = nuevoJugador;
+
         }
-        this.jugadores.add(new JugadorVacio());
 
         pozo.push(mazo.removeFirst());
         jugadorActual = this.jugadores.getFirst();
+        this.mazo = mazo;
     }
 
     public Carta getUltimaCarta(){
@@ -33,18 +61,18 @@ public class Uno {
             throw new RuntimeException("No es el turno de este jugador");
         }
 
-        // aplicar jugadorTieneCarta para verificar si el jugador tiene la carta
         if (!this.jugadorActual.tieneCarta(carta)) {
             throw new RuntimeException("El jugador no tiene esa carta");
         }
-        // no esta andando bien tieneCarta. hablando con chat creo que es porque habria que hacer algo tipo get... para comparar, o sino reescribir el equals que no se bien a que se refiere
 
         pozo.push(carta);
 
-        // actualizar siguiente jugador, ver bien como hacemos eso
-//        jugadorActual = hay que crear esta func
+        carta.aplicarCarta(this);
+
+        jugadorActual = jugadorActual.derecha;
 
     return this;
     }
+
 
 }

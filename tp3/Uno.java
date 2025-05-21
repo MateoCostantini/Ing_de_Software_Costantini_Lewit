@@ -21,15 +21,15 @@ public class Uno {
         this.jugadores.add(primerJugador);
         jugadorActual = primerJugador;
 
-        List<Carta> cartasSegundoJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
-        mazo.subList(0, cantidadCartas).clear();
-        Jugador segundoJugador = new Jugador(jugadores.removeFirst(), cartasSegundoJugador);
-        this.jugadores.add(segundoJugador);
-        jugadorActual.derecha = segundoJugador;
-        jugadorActual.izquierda = segundoJugador;
-        segundoJugador.izquierda = jugadorActual;
-        segundoJugador.derecha = jugadorActual;
-        jugadorActual = segundoJugador;
+        //List<Carta> cartasSegundoJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
+        //mazo.subList(0, cantidadCartas).clear();
+        //Jugador segundoJugador = new Jugador(jugadores.removeFirst(), cartasSegundoJugador);
+        //this.jugadores.add(segundoJugador);
+        //jugadorActual.derecha = segundoJugador;
+        //jugadorActual.izquierda = segundoJugador;
+        //segundoJugador.izquierda = jugadorActual;
+        //segundoJugador.derecha = jugadorActual;
+        //jugadorActual = segundoJugador;
 
         for(String jugador:jugadores){
             List<Carta> cartasJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
@@ -65,13 +65,14 @@ public class Uno {
             throw new RuntimeException("El jugador no tiene esa carta");
         }
 
-        pozo.push(carta);
+
+        pozo.push(pozo.peek().puedeApilarse(carta));
 
         carta.aplicarCarta(this);
 
         jugadorActual = jugadorActual.derecha;
 
-    return this;
+        return this;
     }
 
 

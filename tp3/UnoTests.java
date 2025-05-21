@@ -12,9 +12,9 @@ public class UnoTests {
 
     private static List<Carta> crearMazo() {
         List<Carta> mazo = new ArrayList<>();
-        mazo.add(new CartaNumerada(5, "verde"));
+        mazo.add(new CartaNumerada(5, "rojo"));
         mazo.add(new CartaNumerada(3, "azul"));
-        mazo.add(new CartaNumerada(7, "amarillo"));
+        mazo.add(new CartaNumerada(5, "amarillo"));
         mazo.add(new CartaNumerada(1, "azul"));
         mazo.add(new CartaNumerada(6, "rojo"));
         mazo.add(new CartaNumerada(4, "amarillo"));
@@ -27,11 +27,11 @@ public class UnoTests {
         List<Carta> mazo = new ArrayList<>();
         mazo.add(new CartaNumerada(5, "verde"));
         mazo.add(new CartaSalta("azul"));
-        mazo.add(new CartaNumerada(7, "amarillo"));
-        mazo.add(new CartaNumerada(1, "azul"));
-        mazo.add(new CartaNumerada(6, "rojo"));
+        mazo.add(new CartaNumerada(1, "amarillo"));
+        mazo.add(new CartaNumerada(7, "azul"));
+        mazo.add(new CartaNumerada(6, "azul"));
         mazo.add(new CartaNumerada(4, "amarillo"));
-        mazo.add(new CartaNumerada(8, "rojo"));
+        mazo.add(new CartaNumerada(8, "azul"));
         mazo.add(new CartaNumerada(6, "azul"));
         mazo.add(new CartaNumerada(5, "amarillo"));
         return mazo;
@@ -45,7 +45,7 @@ public class UnoTests {
         mazo.add(new CartaNumerada(1, "azul"));
         mazo.add(new CartaNumerada(6, "rojo"));
         mazo.add(new CartaNumerada(4, "amarillo"));
-        mazo.add(new CartaNumerada(8, "rojo"));
+        mazo.add(new CartaNumerada(8, "azul"));
         mazo.add(new CartaNumerada(6, "azul"));
         mazo.add(new CartaNumerada(5, "azul"));
         mazo.add(new CartaNumerada(2, "verde"));
@@ -82,52 +82,52 @@ public class UnoTests {
     }
 
     @Test void JugarActualizaPozo(){
-        Carta v5 = new CartaNumerada(5, "verde");
+        Carta r5 = new CartaNumerada(5, "rojo");
 
-        assertEquals("verde", new Uno(crearMazo(), crearJugadores(), 2)
-                .jugar("Pepe", v5)
+        assertEquals("rojo", new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
                 .getUltimaCarta()
                 .getColor());
 
         assertEquals(5, new Uno(crearMazo(), crearJugadores(), 2)
-                .jugar("Pepe", v5)
+                .jugar("Pepe", r5)
                 .getUltimaCarta()
                 .getNumero());
     }
 
     @Test void JugarActualizaJugadorActual(){
-        Carta v5 = new CartaNumerada(5, "verde");
-        Carta a7 = new CartaNumerada(7, "amarillo");
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta a5 = new CartaNumerada(5, "amarillo");
 
         assertEquals("amarillo", new Uno(crearMazo(), crearJugadores(), 2)
-                .jugar("Pepe", v5)
-                .jugar("Lolo", a7)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a5)
                 .getUltimaCarta()
                 .getColor());
 
-        assertEquals(7, new Uno(crearMazo(), crearJugadores(), 2)
-                .jugar("Pepe", v5)
-                .jugar("Lolo", a7)
+        assertEquals(5, new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a5)
                 .getUltimaCarta()
                 .getNumero());
     }
 
     @Test void tresJugadores(){
-        Carta v5 = new CartaNumerada(5, "verde");
-        Carta a7 = new CartaNumerada(7, "amarillo");
-        Carta r6 = new CartaNumerada(6, "rojo");
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta a5 = new CartaNumerada(5, "amarillo");
+        Carta a4 = new CartaNumerada(4, "amarillo");
 
-        assertEquals("rojo", new Uno(crearMazo(), crearTresJugadores(), 2)
-                .jugar("Pepe", v5)
-                .jugar("Lolo", a7)
-                .jugar("Tata", r6)
+        assertEquals("amarillo", new Uno(crearMazo(), crearTresJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a5)
+                .jugar("Tata", a4)
                 .getUltimaCarta()
                 .getColor());
 
-        assertEquals(6, new Uno(crearMazo(), crearTresJugadores(), 2)
-                .jugar("Pepe", v5)
-                .jugar("Lolo", a7)
-                .jugar("Tata", r6)
+        assertEquals(4, new Uno(crearMazo(), crearTresJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a5)
+                .jugar("Tata", a4)
                 .getUltimaCarta()
                 .getNumero());
     }
@@ -145,17 +145,17 @@ public class UnoTests {
 
     @Test void cartaSalta() {
         Carta saltaAzul = new CartaSalta("azul");
-        Carta r6 = new CartaNumerada(6, "rojo");
+        Carta a6 = new CartaNumerada(6, "azul");
 
-        assertEquals("rojo", new Uno(crearMazoConSalta(), crearTresJugadores(), 2)
+        assertEquals("azul", new Uno(crearMazoConSalta(), crearTresJugadores(), 2)
                 .jugar("Pepe", saltaAzul)
-                .jugar("Tata", r6)
+                .jugar("Tata", a6)
                 .getUltimaCarta()
                 .getColor());
 
         assertEquals(6, new Uno(crearMazoConSalta(), crearTresJugadores(), 2)
                 .jugar("Pepe", saltaAzul)
-                .jugar("Tata", r6)
+                .jugar("Tata", a6)
                 .getUltimaCarta()
                 .getNumero());
     }

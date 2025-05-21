@@ -24,6 +24,23 @@ public class CartaTomaDos extends Carta{
         return uno;
     }
 
+    public Carta puedeApilarse(Carta nuevaCarta){
+        if (nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaTipo(this.getClass())){
+            return nuevaCarta;
+        }
+        else {
+            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
+        }
+    }
+
+    protected boolean teGustaColor(String unColor) {
+        return unColor.equals(this.color);
+    }
+
+    protected boolean teGustaTipo(Class<?> clase) {
+        return this.getClass() == clase;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

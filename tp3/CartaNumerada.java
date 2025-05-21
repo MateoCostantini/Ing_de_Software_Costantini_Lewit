@@ -19,6 +19,25 @@ public class CartaNumerada extends Carta{
         return numero;
     }
 
+    public Carta puedeApilarse(Carta nuevaCarta){
+        if (nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaNumero(this.numero)){
+            return nuevaCarta;
+        }
+        else {
+            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
+        }
+    }
+
+    protected boolean teGustaColor(String unColor) {
+        return unColor.equals(this.color);
+    }
+
+    protected boolean teGustaNumero(int unNumero) {
+        return this.numero == unNumero;
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

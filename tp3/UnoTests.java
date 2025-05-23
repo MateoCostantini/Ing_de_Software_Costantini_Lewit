@@ -43,12 +43,24 @@ public class UnoTests {
         mazo.add(new CartaTomaDos("azul"));
         mazo.add(new CartaNumerada(7, "amarillo"));
         mazo.add(new CartaNumerada(1, "azul"));
-        mazo.add(new CartaNumerada(6, "rojo"));
+        mazo.add(new CartaNumerada(6, "azul"));
         mazo.add(new CartaNumerada(4, "amarillo"));
         mazo.add(new CartaNumerada(8, "azul"));
-        mazo.add(new CartaNumerada(6, "azul"));
+        mazo.add(new CartaNumerada(6, "verde"));
         mazo.add(new CartaNumerada(5, "azul"));
         mazo.add(new CartaNumerada(2, "verde"));
+        return mazo;
+    }
+
+    private static List<Carta> crearMazoConComodin() {
+        List<Carta> mazo = new ArrayList<>();
+        mazo.add(new CartaNumerada(5, "verde"));
+        mazo.add(new CartaComodin());
+        mazo.add(new CartaComodin());
+        mazo.add(new CartaNumerada(1, "azul"));
+        mazo.add(new CartaNumerada(6, "verde"));
+        mazo.add(new CartaNumerada(4, "amarillo"));
+        mazo.add(new CartaNumerada(8, "verde"));
         return mazo;
     }
 
@@ -193,5 +205,119 @@ public class UnoTests {
                 .jugar("Lolo", a7));
 
     }
+
+    @Test void JugadorApilaCartaHabilitadaPrimerTurno() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+
+        assertEquals("rojo", new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .getUltimaCarta()
+                .getColor());
+
+        assertEquals(5, new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .getUltimaCarta()
+                .getNumero());
+    }
+
+    @Test void JugadorApilaCartaHabilitadaTurnosPosteriores() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta a5 = new CartaNumerada(5, "amarillo");
+
+        assertEquals("amarillo", new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a5)
+                .getUltimaCarta()
+                .getColor());
+
+        assertEquals(5, new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a5)
+                .getUltimaCarta()
+                .getNumero());
+    }
+
+    @Test void JugadorApilaCartaNoHabilitadaNumerada() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta a1 = new CartaNumerada(1, "azul");
+
+        assertThrows( RuntimeException.class, () -> new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", a1));
+
+    }
+
+    @Test void JugadorApilaSumaDosSobreNumeradaHabilitada() {
+        Carta tomaDos = new CartaTomaDos( "azul");
+        Carta a6 = new CartaNumerada(6, "azul");
+
+        assertEquals("azul", new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
+                .jugar("Pepe", tomaDos)
+                .jugar("Tata", a6)
+                .getUltimaCarta()
+                .getColor());
+
+        assertEquals(6, new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
+                .jugar("Pepe", tomaDos)
+                .jugar("Tata", a6)
+                .getUltimaCarta()
+                .getNumero());
+
+    }
+
+    @Test void JugadorApilaSumaDosSobreNumeradaNoHabilitada() {
+        Carta tomaDos = new CartaTomaDos( "azul");
+        Carta a4 = new CartaNumerada(4, "azul");
+
+        assertThrows( RuntimeException.class, () -> new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
+                .jugar("Pepe", tomaDos)
+                .jugar("Tata", a4));
+
+
+    }
+
+    // Testear para cada uno de los tipos de cartas (tipo a un +2 apilarle un numero del mismo color
+    // O a un +2 apilarle un salta, etc.)
+
+    @Test void JugadorApilaComodinSobreNumerada() {
+        Carta comodin = new CartaComodin();
+        Carta v5 = new CartaNumerada(5, "verde");
+
+        assertEquals("azul", new Uno(crearMazoConComodin(), crearJugadores(), 2)
+                .jugar("Pepe", v5)
+                .jugar("Lolo", comodin.asignarColor("azul"))
+                .getUltimaCarta()
+                .getColor());
+    }
+
+    @Test void JugadorApilaNumeradaSobeComodinHabilitada() {
+        Carta comodin = new CartaComodin();
+        Carta a1 = new CartaNumerada(1, "azul");
+
+        assertEquals("azul", new Uno(crearMazoConComodin(), crearJugadores(), 2)
+                .jugar("Pepe", comodin.asignarColor("azul"))
+                .jugar("Lolo", a1)
+                .getUltimaCarta()
+                .getColor());
+
+        assertEquals(1, new Uno(crearMazoConComodin(), crearJugadores(), 2)
+                .jugar("Pepe", comodin.asignarColor("azul"))
+                .jugar("Lolo", a1)
+                .getUltimaCarta()
+                .getNumero());
+
+    }
+
+    @Test void JugadorApilaNumeradaSobreComodinNoHabilitada() {
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta comodin = new CartaComodin();
+
+        assertThrows( RuntimeException.class, () -> new Uno(crearMazoConComodin(), crearJugadores(), 2)
+                .jugar("Pepe", comodin.asignarColor("verde"))
+                .jugar("Lolo", a1));
+
+    }
+
+
 
 }

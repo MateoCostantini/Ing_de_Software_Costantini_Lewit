@@ -3,15 +3,11 @@ package Uno;
 import java.util.Objects;
 
 public class CartaSalta extends Carta{
-    String color;
 
     public CartaSalta(String unColor){
         color = unColor;
     }
 
-    public String getColor(){
-        return color;
-    }
 
     public Uno aplicarCarta(Uno uno) {
         uno.jugadorActual = uno.jugadorActual.derecha;

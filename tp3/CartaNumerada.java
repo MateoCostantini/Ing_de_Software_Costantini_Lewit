@@ -4,16 +4,13 @@ import java.util.Objects;
 
 public class CartaNumerada extends Carta{
     int numero;
-    String color;
 
     public CartaNumerada(int unNumero, String unColor){
         numero = unNumero;
         color = unColor;
     }
 
-    public String getColor(){
-        return color;
-    }
+
 
     public int getNumero(){
         return numero;

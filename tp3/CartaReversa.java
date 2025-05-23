@@ -1,15 +1,13 @@
 package Uno;
 
+import java.util.Objects;
+
 public class CartaReversa extends Carta{
-    String color;
 
     public CartaReversa(String unColor){
         color = unColor;
     }
 
-    public String getColor(){
-        return color;
-    }
 
 
     public Carta puedeApilarse(Carta nuevaCarta){
@@ -32,11 +30,14 @@ public class CartaReversa extends Carta{
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (this == o) return true;
+        if (!(o instanceof CartaReversa)) return false;
+        CartaReversa otra = (CartaReversa) o;
+        return color.equals(otra.color);
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(color);
     }
 }

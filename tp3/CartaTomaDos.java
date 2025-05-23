@@ -5,15 +5,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class CartaTomaDos extends Carta{
-    String color;
 
     public CartaTomaDos(String unColor){
         color = unColor;
     }
 
-    public String getColor(){
-        return color;
-    }
 
     public Uno aplicarCarta(Uno uno) {
 

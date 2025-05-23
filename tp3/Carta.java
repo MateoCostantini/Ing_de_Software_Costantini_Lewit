@@ -2,13 +2,18 @@ package Uno;
 
 public abstract class Carta {
     //Boolean abstract validar();
+    String color;
 
     public String getColor(){
-        throw new RuntimeException("Esta carta no tiene color");
+        return color;
     }
 
     public int getNumero(){
         throw new RuntimeException("Esta carta no tiene numero");
+    }
+
+    public Carta asignarColor(String unColor){
+        throw new RuntimeException("No se puede asignar color a esta carta");
     }
 
     public Uno aplicarCarta(Uno uno) { return uno; };

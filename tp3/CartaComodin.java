@@ -1,10 +1,13 @@
 package Uno;
 
+import java.util.Objects;
+
 public class CartaComodin extends Carta{
-    String color;
 
-    // Que el aplicar carta le agregue el color que se decide.
-
+    public Carta asignarColor(String unColor){
+        color = unColor;
+        return this;
+    }
 
     public Carta puedeApilarse(Carta nuevaCarta){
         if (nuevaCarta.teGustaColor(this.color) ){
@@ -22,11 +25,12 @@ public class CartaComodin extends Carta{
 
     @Override
     public boolean equals(Object o) {
-        return false;
+        if (!(o instanceof CartaComodin)) return false;
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash("Comodin");
     }
 }

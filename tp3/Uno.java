@@ -9,6 +9,7 @@ public class Uno {
     List<Jugador> jugadores = new ArrayList<>();
     Jugador jugadorActual;
     List<Carta> mazo;
+    Controlador controlador;
 
     public Uno(List<Carta> mazo, List<String> jugadores, int cantidadCartas){
         if (jugadores.size() < 2){
@@ -47,6 +48,8 @@ public class Uno {
 
         }
 
+        this.controlador = new ControladorDerecha();
+
         pozo.push(mazo.removeFirst());
         jugadorActual = this.jugadores.getFirst();
         this.mazo = mazo;
@@ -70,9 +73,13 @@ public class Uno {
 
         carta.aplicarCarta(this);
 
-        jugadorActual = jugadorActual.derecha;
+        jugadorActual = controlador.siguiente(jugadorActual);
 
         return this;
+    }
+
+    public Jugador getJugadorActual(){
+        return jugadorActual;
     }
 
 

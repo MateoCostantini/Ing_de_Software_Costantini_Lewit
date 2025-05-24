@@ -10,7 +10,7 @@ public class CartaSalta extends Carta{
 
 
     public Uno aplicarCarta(Uno uno) {
-        uno.jugadorActual = uno.jugadorActual.derecha;
+        uno.jugadorActual = uno.controlador.siguiente(uno.jugadorActual);
         return uno;
     }
 

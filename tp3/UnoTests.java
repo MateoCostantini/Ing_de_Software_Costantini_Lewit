@@ -64,6 +64,51 @@ public class UnoTests {
         return mazo;
     }
 
+    private static List<Carta> crearMazoConReversa() {
+        List<Carta> mazo = new ArrayList<>();
+        mazo.add(new CartaNumerada(5, "azul"));
+        mazo.add(new CartaNumerada(1, "azul"));
+        mazo.add(new CartaNumerada(7, "amarillo"));
+        mazo.add(new CartaReversa("azul"));
+        mazo.add(new CartaNumerada(6, "azul"));
+        mazo.add(new CartaNumerada(4, "amarillo"));
+        mazo.add(new CartaNumerada(8, "azul"));
+        mazo.add(new CartaNumerada(6, "verde"));
+        mazo.add(new CartaNumerada(5, "verde"));
+        mazo.add(new CartaNumerada(2, "verde"));
+        return mazo;
+    }
+
+    private static List<Carta> crearMazoConReversaTomaDos() {
+        List<Carta> mazo = new ArrayList<>();
+        mazo.add(new CartaTomaDos("azul"));
+        mazo.add(new CartaNumerada(1, "azul"));
+        mazo.add(new CartaNumerada(7, "amarillo"));
+        mazo.add(new CartaReversa("azul"));
+        mazo.add(new CartaNumerada(6, "azul"));
+        mazo.add(new CartaNumerada(4, "amarillo"));
+        mazo.add(new CartaNumerada(8, "azul"));
+        mazo.add(new CartaNumerada(6, "verde"));
+        mazo.add(new CartaNumerada(5, "verde"));
+        mazo.add(new CartaNumerada(2, "verde"));
+        return mazo;
+    }
+
+    private static List<Carta> crearMazoConReversaSalta() {
+        List<Carta> mazo = new ArrayList<>();
+        mazo.add(new CartaSalta("azul"));
+        mazo.add(new CartaNumerada(1, "azul"));
+        mazo.add(new CartaNumerada(7, "amarillo"));
+        mazo.add(new CartaReversa("azul"));
+        mazo.add(new CartaNumerada(6, "azul"));
+        mazo.add(new CartaNumerada(4, "amarillo"));
+        mazo.add(new CartaNumerada(8, "azul"));
+        mazo.add(new CartaNumerada(6, "verde"));
+        mazo.add(new CartaNumerada(5, "verde"));
+        mazo.add(new CartaNumerada(2, "verde"));
+        return mazo;
+    }
+
     private static List<String> crearJugadores() {
         List<String> jugadores = new ArrayList<>();
         jugadores.add("Pepe");
@@ -183,7 +228,7 @@ public class UnoTests {
 
     @Test void cantidadCartas() {
         assertEquals(2, new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
-                .jugadorActual
+                .getJugadorActual()
                 .cantidadCartas());
     }
 
@@ -318,6 +363,36 @@ public class UnoTests {
 
     }
 
+    @Test void ReversaCambiaOrden() {
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta reversaAzul = new CartaReversa("azul");
 
+        assertEquals( "Pepe", new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
+                .jugar("Pepe", a1)
+                .jugar("Lolo", reversaAzul)
+                .getJugadorActual()
+                .getNombre());
+    }
 
+    @Test void TomaDosParaLaIzquierda() {
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta reversaAzul = new CartaReversa("azul");
+        Carta tomaDosAzul = new CartaTomaDos("azul");
+
+        assertEquals( 4, new Uno(crearMazoConReversaTomaDos(), crearTresJugadores(), 2)
+                .jugar("Pepe", a1)
+                .jugar("Lolo", reversaAzul)
+                .jugar("Pepe", tomaDosAzul)
+                .getJugadorActual().derecha
+                .cantidadCartas());
+
+//        assertEquals(4, new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
+//                .jugar("Pepe", tomaDosAzul)
+//                .jugadorActual.izquierda
+//                .cantidadCartas());
+    }
+
+    // agregar test toma dos para la izquierda
+
+    // agregar test salta para la izquierda
 }

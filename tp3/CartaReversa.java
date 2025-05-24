@@ -12,7 +12,7 @@ public class CartaReversa extends Carta{
 
 
     public Uno aplicarCarta(Uno uno) {
-        
+        uno.controlador = uno.controlador.cambiarControlador();
         return uno;
     }
 

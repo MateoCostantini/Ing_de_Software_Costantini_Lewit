@@ -12,11 +12,7 @@ public class CartaReversa extends Carta{
 
 
     public Uno aplicarCarta(Uno uno) {
-
-        List<Carta> cartasNuevas = new ArrayList<>(uno.mazo.subList(0, 2));
-        uno.mazo.subList(0, 2).clear();
-        uno.jugadorActual.derecha.cartasEnMano.addAll(cartasNuevas);
-        uno.jugadorActual = uno.jugadorActual.derecha;
+        
         return uno;
     }
 

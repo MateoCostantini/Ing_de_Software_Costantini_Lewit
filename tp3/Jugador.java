@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Jugador {
     String nombre;
-    HashSet<Carta> cartasEnMano = new HashSet<>();
+    List<Carta> cartasEnMano = new ArrayList<>();
     Jugador derecha;
     Jugador izquierda;
     boolean cantoUno = false;

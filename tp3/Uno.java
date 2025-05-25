@@ -62,17 +62,20 @@ public class Uno {
             throw new RuntimeException("Esta carta no puede ser apilada al mazo");
         }
 
+        // si el jugador no canto UNO tirando su penultima carta, se lo penaliza y se le dan dos cartas
+        if (jugadorActual.cartasEnMano.size() == 1 && !(jugadorActual.getCantoUno()) ){
+            jugadorActual.agarrarCarta(2, mazo);
+        }
 
         pozo = carta;
         jugadorActual.cartasEnMano.remove(carta);
 
-        carta.aplicarCarta(this);
-
-        if (jugadorActual.cartasEnMano.isEmpty() && jugadorActual.getCantoUno()){
+        if (jugadorActual.cartasEnMano.isEmpty()){
             throw new RuntimeException("El Jugador gano el juego");
         }
 
-        //carta.cantoUno = false;
+        carta.aplicarCarta(this);
+
         jugadorActual = controlador.siguiente(jugadorActual);
 
         return this;
@@ -94,8 +97,6 @@ public class Uno {
 //        }
         // esto estaria testeandose en jugar
 
-
-
         return this;
     }
 
@@ -115,12 +116,9 @@ public class Uno {
         return this;
     }
 
-
-
     public Jugador getJugadorActual(){
         return jugadorActual;
     }
-
 
 }
 

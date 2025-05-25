@@ -76,6 +76,8 @@ public class UnoTests {
         mazo.add(new CartaNumerada(6, "verde"));
         mazo.add(new CartaNumerada(5, "verde"));
         mazo.add(new CartaNumerada(2, "verde"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
         return mazo;
     }
 
@@ -91,6 +93,8 @@ public class UnoTests {
         mazo.add(new CartaNumerada(6, "verde"));
         mazo.add(new CartaNumerada(5, "verde"));
         mazo.add(new CartaNumerada(2, "verde"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
         return mazo;
     }
 
@@ -106,6 +110,19 @@ public class UnoTests {
         mazo.add(new CartaNumerada(6, "verde"));
         mazo.add(new CartaNumerada(5, "verde"));
         mazo.add(new CartaNumerada(2, "verde"));
+        return mazo;
+    }
+
+    private static List<Carta> crearMazoRepetidas() {
+        List<Carta> mazo = new ArrayList<>();
+        mazo.add(new CartaNumerada(5, "rojo"));
+        mazo.add(new CartaNumerada(5, "rojo"));
+        mazo.add(new CartaNumerada(1, "azul"));
+        mazo.add(new CartaNumerada(6, "rojo"));
+        mazo.add(new CartaNumerada(5, "amarillo"));
+        mazo.add(new CartaNumerada(4, "amarillo"));
+        mazo.add(new CartaNumerada(8, "rojo"));
+        mazo.add(new CartaNumerada(6, "azul"));
         return mazo;
     }
 
@@ -480,7 +497,19 @@ public class UnoTests {
                         .getMessage());
     }
 
+    @Test void CartasRepetidas() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta am5 = new CartaNumerada(5, "amarillo");
+        Carta reversaAzul = new CartaReversa("azul");
 
+        assertEquals("rojo", new Uno(crearMazoRepetidas(), crearJugadores(), 3)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", am5)
+                .cantarUnoYJugar("Pepe", r5)
+                .getUltimaCarta()
+                .getColor());
+    }
+    
     // agregar test salta para la izquierda
         // tomaDos testea un comportamiento casi identico, mepa q no haria falta
 

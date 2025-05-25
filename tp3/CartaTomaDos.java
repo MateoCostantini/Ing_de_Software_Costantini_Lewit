@@ -13,21 +13,18 @@ public class CartaTomaDos extends Carta{
 
     public Uno aplicarCarta(Uno uno) {
 
-        List<Carta> cartasNuevas = new ArrayList<>(uno.mazo.subList(0, 2));
-        uno.mazo.subList(0, 2).clear();
-        uno.controlador.siguiente(uno.jugadorActual) // siguiente jugador
-                .cartasEnMano.addAll(cartasNuevas);
+        //List<Carta> cartasNuevas = new ArrayList<>(uno.mazo.subList(0, 2));
+        //uno.mazo.subList(0, 2).clear();
+        //uno.controlador.siguiente(uno.jugadorActual) // siguiente jugador
+        //        .cartasEnMano.addAll(cartasNuevas);
+
+        uno.controlador.siguiente(uno.jugadorActual).agarrarCarta(2, uno.mazo);
         uno.jugadorActual = uno.controlador.siguiente(uno.jugadorActual);
         return uno;
     }
 
-    public Carta puedeApilarse(Carta nuevaCarta){
-        if (nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaTipo(this.getClass())){
-            return nuevaCarta;
-        }
-        else {
-            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
-        }
+    public boolean puedeApilarse(Carta nuevaCarta){
+        return nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaTipo(this.getClass());
     }
 
     protected boolean teGustaColor(String unColor) {

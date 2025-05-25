@@ -66,9 +66,9 @@ public class UnoTests {
 
     private static List<Carta> crearMazoConReversa() {
         List<Carta> mazo = new ArrayList<>();
-        mazo.add(new CartaNumerada(5, "azul"));
+        mazo.add(new CartaReversa("azul"));
         mazo.add(new CartaNumerada(1, "azul"));
-        mazo.add(new CartaNumerada(7, "amarillo"));
+        mazo.add(new CartaNumerada(7, "azul"));
         mazo.add(new CartaReversa("azul"));
         mazo.add(new CartaNumerada(6, "azul"));
         mazo.add(new CartaNumerada(4, "amarillo"));
@@ -374,6 +374,19 @@ public class UnoTests {
                 .getNombre());
     }
 
+    @Test void TestDobleReversa() {
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta reversaAzul = new CartaReversa("azul");
+        Carta a7 = new CartaNumerada(7, "azul");
+        assertEquals( "Tata", new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
+                .jugar("Pepe", a1)
+                .jugar("Lolo", reversaAzul)
+                .jugar("Pepe", reversaAzul)
+                .jugar("Lolo", a7)
+                .getJugadorActual()
+                .getNombre());
+    }
+
     @Test void TomaDosParaLaIzquierda() {
         Carta a1 = new CartaNumerada(1, "azul");
         Carta reversaAzul = new CartaReversa("azul");
@@ -386,13 +399,44 @@ public class UnoTests {
                 .getJugadorActual().derecha
                 .cantidadCartas());
 
-//        assertEquals(4, new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
-//                .jugar("Pepe", tomaDosAzul)
-//                .jugadorActual.izquierda
-//                .cantidadCartas());
+        assertEquals( "Lolo", new Uno(crearMazoConReversaTomaDos(), crearTresJugadores(), 2)
+                .jugar("Pepe", a1)
+                .jugar("Lolo", reversaAzul)
+                .jugar("Pepe", tomaDosAzul)
+                .getJugadorActual()
+                .getNombre());
+
+    }
+    @Test void prueba() {
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta reversaAzul = new CartaReversa("azul");
+        Carta a7 = new CartaNumerada(7, "azul");
+        assertEquals( "Tata", new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
+                .jugar("Pepe", a1)
+                .jugar("Lolo", reversaAzul)
+                .jugar("Pepe", reversaAzul)
+                .jugar("Lolo", a7)
+                .getJugadorActual()
+                .getNombre());
     }
 
     // agregar test toma dos para la izquierda
 
     // agregar test salta para la izquierda
+
+    //Testear si un jugador tiene dos cartas iguales (podrian ser dos comodines o dos +2 del mismo color. Y si tira una sigue con la otra en mano.
+
+    // Testear las cosas que agregue (lo que esta abajo)
 }
+
+// agregue que el jugador cuando tira una carta no tiene que tener mas esa carta.
+// hice que pozo sea una carta y no un stack.
+// cambie la funcion puedeApilarse para que devuelva un boolean. Sirve para poder hacer un stream en el caso de tomarCarta
+// Agregue la funcion tomarCarta que se va a llamar en el caso de que un jugador no pueda tirar ninguna carta.
+// Agregue que el jugador puede cantar uno. Lo tiene que acer solo si le queda una carta. Si despues de cantar uno agarra una carta (por +2 o xq no tiene para tirar) entonces se le va el UNO que habia cantado.
+// No se si se podria hacer con polimorfismo lo de cantar UNO, pero no me esta dando la cabeza.
+// Agregue que si despues de tirar una carta ya no tiene mas y habia cantado 1, entonce gano el juego.
+
+// TESTEAR y revisar Todas estas cosas nuevas.
+
+// faltaria ver los casos donde si un jugador se queda sin cartas pero no canto UNO.

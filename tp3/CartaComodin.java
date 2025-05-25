@@ -9,13 +9,8 @@ public class CartaComodin extends Carta{
         return this;
     }
 
-    public Carta puedeApilarse(Carta nuevaCarta){
-        if (nuevaCarta.teGustaColor(this.color) ){
-            return nuevaCarta;
-        }
-        else {
-            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
-        }
+    public boolean puedeApilarse(Carta nuevaCarta){
+        return (nuevaCarta.teGustaColor(this.color) );
     }
 
     protected boolean teGustaColor(String unColor) {

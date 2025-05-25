@@ -1,5 +1,6 @@
 package Uno;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -8,10 +9,11 @@ public class Jugador {
     HashSet<Carta> cartasEnMano = new HashSet<>();
     Jugador derecha;
     Jugador izquierda;
+    boolean cantoUno = false;
 
-    public Jugador(String nombre, List<Carta> cartas){
+    public Jugador(String nombre){
         this.nombre = nombre;
-        cartasEnMano.addAll(cartas);
+        //cartasEnMano.addAll(cartas);
     }
 
     public String getNombre(){
@@ -22,8 +24,24 @@ public class Jugador {
         return cartasEnMano.contains(carta);
     }
 
-
     public int cantidadCartas(){
         return cartasEnMano.size();
     }
+
+    public Jugador agarrarCarta(int cantidad, List<Carta> mazo){
+        List<Carta> cartasNuevas = new ArrayList<>(mazo.subList(0, cantidad));
+        mazo.subList(0, cantidad).clear();
+        this.cartasEnMano.addAll(cartasNuevas);
+
+        if (this.cantidadCartas() > 1){
+            this.cantoUno = false;
+        }
+        return this;
+    }
+
+    public boolean getCantoUno(){
+        return cantoUno;
+    }
+
 }
+

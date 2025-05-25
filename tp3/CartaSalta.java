@@ -14,13 +14,8 @@ public class CartaSalta extends Carta{
         return uno;
     }
 
-    public Carta puedeApilarse(Carta nuevaCarta){
-        if (nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaTipo(this.getClass())){
-            return nuevaCarta;
-        }
-        else {
-            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
-        }
+    public boolean puedeApilarse(Carta nuevaCarta){
+        return (nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaTipo(this.getClass()));
     }
 
     protected boolean teGustaColor(String unColor) {

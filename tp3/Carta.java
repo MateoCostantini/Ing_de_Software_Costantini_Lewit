@@ -18,8 +18,8 @@ public abstract class Carta {
 
     public Uno aplicarCarta(Uno uno) { return uno; };
 
-    public Carta puedeApilarse(Carta nuevaCarta){
-        throw new RuntimeException("Esta carta no puede ser apilada al mazo");
+    public boolean puedeApilarse(Carta nuevaCarta){
+        return false;
     }
 
     @Override
@@ -39,4 +39,5 @@ public abstract class Carta {
     protected boolean teGustaTipo(Class<?> tipo) {
         return false;
     }
+
 }

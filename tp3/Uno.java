@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 public class Uno {
-    Stack<Carta> pozo = new Stack<>();
+    Carta pozo;
     List<Jugador> jugadores = new ArrayList<>();
     Jugador jugadorActual;
     List<Carta> mazo;
@@ -16,27 +16,17 @@ public class Uno {
             throw new RuntimeException("La partida debe tener 2 o mas jugadores");
         }
 
-        List<Carta> cartasPrimerJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
-        mazo.subList(0, cantidadCartas).clear();
-        Jugador primerJugador = new Jugador(jugadores.removeFirst(), cartasPrimerJugador);
+        //List<Carta> cartasPrimerJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
+        //mazo.subList(0, cantidadCartas).clear();
+        Jugador primerJugador = (new Jugador(jugadores.removeFirst())).agarrarCarta(cantidadCartas, mazo);
         this.jugadores.add(primerJugador);
         jugadorActual = primerJugador;
 
-        //List<Carta> cartasSegundoJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
-        //mazo.subList(0, cantidadCartas).clear();
-        //Jugador segundoJugador = new Jugador(jugadores.removeFirst(), cartasSegundoJugador);
-        //this.jugadores.add(segundoJugador);
-        //jugadorActual.derecha = segundoJugador;
-        //jugadorActual.izquierda = segundoJugador;
-        //segundoJugador.izquierda = jugadorActual;
-        //segundoJugador.derecha = jugadorActual;
-        //jugadorActual = segundoJugador;
-
         for(String jugador:jugadores){
-            List<Carta> cartasJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
-            mazo.subList(0, cantidadCartas).clear();
+            //List<Carta> cartasJugador = new ArrayList<>(mazo.subList(0, cantidadCartas));
+            //mazo.subList(0, cantidadCartas).clear();
 
-            Jugador nuevoJugador = new Jugador(jugador, cartasJugador);
+            Jugador nuevoJugador = (new Jugador(jugador)).agarrarCarta(cantidadCartas, mazo);
             this.jugadores.add(nuevoJugador);
 
             jugadorActual.derecha = nuevoJugador;
@@ -50,13 +40,13 @@ public class Uno {
 
         this.controlador = new ControladorDerecha();
 
-        pozo.push(mazo.removeFirst());
+        pozo = mazo.removeFirst();
         jugadorActual = this.jugadores.getFirst();
         this.mazo = mazo;
     }
 
     public Carta getUltimaCarta(){
-        return pozo.peek();
+        return pozo;
     }
 
     public Uno jugar(String jugador, Carta carta){
@@ -68,13 +58,52 @@ public class Uno {
             throw new RuntimeException("El jugador no tiene esa carta");
         }
 
+        if (!pozo.puedeApilarse(carta)) {
+            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
+        }
 
-        pozo.push(pozo.peek().puedeApilarse(carta));
+
+        pozo = carta;
+        jugadorActual.cartasEnMano.remove(carta);
 
         carta.aplicarCarta(this);
 
+        if (jugadorActual.cartasEnMano.isEmpty() && jugadorActual.getCantoUno()){
+            throw new RuntimeException("El Jugador gano el juego");
+        }
+
+        //carta.cantoUno = false;
         jugadorActual = controlador.siguiente(jugadorActual);
 
+        return this;
+    }
+
+    public Uno tomarCarta(String jugador) {
+        if (!jugador.equals(jugadorActual.getNombre())) {
+            throw new RuntimeException("No es el turno de este jugador");
+        }
+
+        if (jugadorActual.cartasEnMano.stream().anyMatch(carta -> pozo.puedeApilarse(carta))) {
+            // Corrobora que no puede jugar ninguna carta.
+            jugadorActual.agarrarCarta(1, mazo);
+        }
+        else {
+            throw new RuntimeException("Se debia tirar la carta habilitada");
+            // Esta bien tirar un runtimeException en este caso?
+        }
+        return this;
+    }
+
+    public Uno uno(String jugador){
+        if (!jugador.equals(jugadorActual.getNombre())) {
+            throw new RuntimeException("No es el turno de este jugador");
+        }
+
+        if (jugadorActual.cantidadCartas() != 1){
+            throw new RuntimeException("El jugador debe tener una unica carta para cantar UNO.");
+        }
+
+        jugadorActual.cantoUno = true;
         return this;
     }
 
@@ -84,3 +113,5 @@ public class Uno {
 
 
 }
+
+

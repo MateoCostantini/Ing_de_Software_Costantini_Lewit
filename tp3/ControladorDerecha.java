@@ -9,4 +9,3 @@ public class ControladorDerecha extends Controlador{
         return new ControladorIzquierda();
     }
 }
-

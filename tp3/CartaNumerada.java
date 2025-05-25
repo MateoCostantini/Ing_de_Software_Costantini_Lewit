@@ -16,13 +16,8 @@ public class CartaNumerada extends Carta{
         return numero;
     }
 
-    public Carta puedeApilarse(Carta nuevaCarta){
-        if (nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaNumero(this.numero)){
-            return nuevaCarta;
-        }
-        else {
-            throw new RuntimeException("Esta carta no puede ser apilada al mazo");
-        }
+    public boolean puedeApilarse(Carta nuevaCarta){
+        return nuevaCarta.teGustaColor(this.color) || nuevaCarta.teGustaNumero(this.numero);
     }
 
     protected boolean teGustaColor(String unColor) {

@@ -407,6 +407,7 @@ public class UnoTests {
                 .getNombre());
 
     }
+
     @Test void prueba() {
         Carta a1 = new CartaNumerada(1, "azul");
         Carta reversaAzul = new CartaReversa("azul");
@@ -420,21 +421,80 @@ public class UnoTests {
                 .getNombre());
     }
 
-    // agregar test toma dos para la izquierda
+    @Test void JugadorNoPuedeTirarDosVecesMismaCarta() {
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta reversaAzul = new CartaReversa("azul");
+
+        assertThrows(RuntimeException.class, () -> new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
+                .jugar("Pepe", a1)
+                .jugar("Lolo", reversaAzul)
+                .jugar("Pepe", a1));
+
+    }
+
+    @Test void TomarCarta() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta reversaAzul = new CartaReversa("azul");
+        Carta am5 = new CartaNumerada(5, "amarillo");
+
+        assertEquals( 2, new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", am5)
+                .tomarCarta("Pepe")
+                .getJugadorActual()
+                .cantidadCartas());
+    }
+
+    @Test void CantarUno() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+
+        assertEquals( true, new Uno(crearMazo(), crearJugadores(), 2)
+                .cantarUnoYJugar("Pepe", r5)
+                .getJugadorActual().izquierda
+                .getCantoUno());
+    }
+
+    @Test void TomarCartaAnulaCantarUno() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta am5 = new CartaNumerada(5, "amarillo");
+
+        assertEquals( false, new Uno(crearMazo(), crearJugadores(), 2)
+                .cantarUnoYJugar("Pepe", r5)
+                .cantarUnoYJugar("Lolo", am5)
+                .tomarCarta("Pepe")
+                .getJugadorActual()
+                .getCantoUno());
+
+    }
+
+    @Test void GanaElJuego() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta am5 = new CartaNumerada(5, "amarillo");
+
+        assertEquals( false, new Uno(crearMazo(), crearJugadores(), 2)
+                .cantarUnoYJugar("Pepe", r5)
+                .cantarUnoYJugar("Lolo", am5)
+                .tomarCarta("Pepe")
+                .getJugadorActual()
+                .getCantoUno());
+
+    }
 
     // agregar test salta para la izquierda
+        // tomaDos testea un comportamiento casi identico, mepa q no haria falta
 
-    //Testear si un jugador tiene dos cartas iguales (podrian ser dos comodines o dos +2 del mismo color. Y si tira una sigue con la otra en mano.
+    // Testear si un jugador tiene dos cartas iguales (podrian ser dos comodines o dos +2 del mismo color. Y si tira una sigue con la otra en mano.
 
     // Testear las cosas que agregue (lo que esta abajo)
 }
 
-// agregue que el jugador cuando tira una carta no tiene que tener mas esa carta.
-// hice que pozo sea una carta y no un stack.
-// cambie la funcion puedeApilarse para que devuelva un boolean. Sirve para poder hacer un stream en el caso de tomarCarta
+// agregue que el jugador cuando tira una carta no tiene que tener mas esa carta. #TESTEADO
+// hice que pozo sea una carta y no un stack. #asumo que no lleva test
+// cambie la funcion puedeApilarse para que devuelva un boolean. Sirve para poder hacer un stream en el caso de tomarCarta #no se si lleva test
 // Agregue la funcion tomarCarta que se va a llamar en el caso de que un jugador no pueda tirar ninguna carta.
-// Agregue que el jugador puede cantar uno. Lo tiene que acer solo si le queda una carta. Si despues de cantar uno agarra una carta (por +2 o xq no tiene para tirar) entonces se le va el UNO que habia cantado.
-// No se si se podria hacer con polimorfismo lo de cantar UNO, pero no me esta dando la cabeza.
+// Agregue que el jugador puede cantar uno. Lo tiene que hacer solo si le queda una carta. #TESTEADO
+// Si despues de cantar uno agarra una carta (por +2 o xq no tiene para tirar) entonces se le va el UNO que habia cantado. #TESTEADO
+// No se si se podria hacer con polimorfismo lo de cantar UNO, pero no me esta dando la cabeza. #emilio en un mail dijo que no es polimorfico el IF de cantar uno
 // Agregue que si despues de tirar una carta ya no tiene mas y habia cantado 1, entonce gano el juego.
 
 // TESTEAR y revisar Todas estas cosas nuevas.

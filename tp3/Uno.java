@@ -78,12 +78,33 @@ public class Uno {
         return this;
     }
 
+    public Uno cantarUnoYJugar(String jugador, Carta carta){
+        // pregunto si tiene 2, porque ya al entrar esta funcion se asume que se puede tirar la carta que se pase como parametro.
+        // si la carta fuese incorrecta, o por cualquier otra razon, tira exception. el comportamiento esperado es que tenga 2 cartas.
+        if (jugadorActual.cantidadCartas() != 2){
+            throw new RuntimeException("El jugador debe quedarse con una unica carta para cantar UNO.");
+        }
+
+        jugadorActual.cantoUno = true;
+
+        jugar(jugador, carta);
+
+//        if (!jugador.equals(jugadorActual.getNombre())) {
+//            throw new RuntimeException("No es el turno de este jugador");
+//        }
+        // esto estaria testeandose en jugar
+
+
+
+        return this;
+    }
+
     public Uno tomarCarta(String jugador) {
         if (!jugador.equals(jugadorActual.getNombre())) {
             throw new RuntimeException("No es el turno de este jugador");
         }
 
-        if (jugadorActual.cartasEnMano.stream().anyMatch(carta -> pozo.puedeApilarse(carta))) {
+        if (!jugadorActual.cartasEnMano.stream().anyMatch(carta -> pozo.puedeApilarse(carta))) {
             // Corrobora que no puede jugar ninguna carta.
             jugadorActual.agarrarCarta(1, mazo);
         }
@@ -94,18 +115,7 @@ public class Uno {
         return this;
     }
 
-    public Uno uno(String jugador){
-        if (!jugador.equals(jugadorActual.getNombre())) {
-            throw new RuntimeException("No es el turno de este jugador");
-        }
 
-        if (jugadorActual.cantidadCartas() != 1){
-            throw new RuntimeException("El jugador debe tener una unica carta para cantar UNO.");
-        }
-
-        jugadorActual.cantoUno = true;
-        return this;
-    }
 
     public Jugador getJugadorActual(){
         return jugadorActual;

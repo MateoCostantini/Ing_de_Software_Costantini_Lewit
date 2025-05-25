@@ -468,17 +468,18 @@ public class UnoTests {
     }
 
     @Test void GanaElJuego() {
-        Carta r5 = new CartaNumerada(5, "rojo");
-        Carta am5 = new CartaNumerada(5, "amarillo");
+        Carta a1 = new CartaNumerada(1, "azul");
+        Carta a7 = new CartaNumerada(7, "azul");
+        Carta reversaAzul = new CartaReversa("azul");
 
-        assertEquals( false, new Uno(crearMazo(), crearJugadores(), 2)
-                .cantarUnoYJugar("Pepe", r5)
-                .cantarUnoYJugar("Lolo", am5)
-                .tomarCarta("Pepe")
-                .getJugadorActual()
-                .getCantoUno());
-
+        assertEquals("El Jugador gano el juego",
+                assertThrows(RuntimeException.class, () -> new Uno(crearMazoConReversa(), crearJugadores(), 2)
+                    .cantarUnoYJugar("Pepe", a1)
+                    .cantarUnoYJugar("Lolo", a7)
+                    .jugar("Pepe", reversaAzul))
+                        .getMessage());
     }
+
 
     // agregar test salta para la izquierda
         // tomaDos testea un comportamiento casi identico, mepa q no haria falta

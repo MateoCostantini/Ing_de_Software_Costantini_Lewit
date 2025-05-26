@@ -1,7 +1,6 @@
 package Uno;
 
 public abstract class Carta {
-    //Boolean abstract validar();
     String color;
 
     public String getColor(){
@@ -16,17 +15,12 @@ public abstract class Carta {
         throw new RuntimeException("No se puede asignar color a esta carta");
     }
 
-    public Uno aplicarCarta(Uno uno) { return uno; };
+    public Uno aplicarCarta(Uno uno) { return uno;
+    }
 
     public boolean puedeApilarse(Carta nuevaCarta){
         return false;
     }
-
-    @Override
-    public abstract boolean equals(Object o);
-
-    @Override
-    public abstract int hashCode();
 
     protected boolean teGustaColor(String color) {
         return false;
@@ -39,5 +33,11 @@ public abstract class Carta {
     protected boolean teGustaTipo(Class<?> tipo) {
         return false;
     }
+
+    @Override
+    public abstract boolean equals(Object o);
+
+    @Override
+    public abstract int hashCode();
 
 }

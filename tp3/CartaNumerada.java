@@ -1,3 +1,4 @@
+
 package Uno;
 
 import java.util.Objects;
@@ -9,8 +10,6 @@ public class CartaNumerada extends Carta{
         numero = unNumero;
         color = unColor;
     }
-
-
 
     public int getNumero(){
         return numero;
@@ -29,7 +28,6 @@ public class CartaNumerada extends Carta{
     }
 
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,7 +38,7 @@ public class CartaNumerada extends Carta{
 
     @Override
     public int hashCode() {
-        return Objects.hash(numero, color); // hace falta redefinir hash?
+        return Objects.hash(numero, color);
     }
 
 }

@@ -1,7 +1,7 @@
+
 package Uno;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class Jugador {
@@ -13,11 +13,14 @@ public class Jugador {
 
     public Jugador(String nombre){
         this.nombre = nombre;
-        //cartasEnMano.addAll(cartas);
     }
 
     public String getNombre(){
         return this.nombre;
+    }
+
+    public boolean getCantoUno(){
+        return cantoUno;
     }
 
     public boolean tieneCarta(Carta carta){
@@ -38,10 +41,4 @@ public class Jugador {
         }
         return this;
     }
-
-    public boolean getCantoUno(){
-        return cantoUno;
-    }
-
 }
-

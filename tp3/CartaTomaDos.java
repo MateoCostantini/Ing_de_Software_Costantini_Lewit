@@ -12,12 +12,6 @@ public class CartaTomaDos extends Carta{
 
 
     public Uno aplicarCarta(Uno uno) {
-
-        //List<Carta> cartasNuevas = new ArrayList<>(uno.mazo.subList(0, 2));
-        //uno.mazo.subList(0, 2).clear();
-        //uno.controlador.siguiente(uno.jugadorActual) // siguiente jugador
-        //        .cartasEnMano.addAll(cartasNuevas);
-
         uno.controlador.siguiente(uno.jugadorActual).agarrarCarta(2, uno.mazo);
         uno.jugadorActual = uno.controlador.siguiente(uno.jugadorActual);
         return uno;

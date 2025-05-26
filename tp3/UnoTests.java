@@ -20,6 +20,12 @@ public class UnoTests {
         mazo.add(new CartaNumerada(4, "amarillo"));
         mazo.add(new CartaNumerada(8, "rojo"));
         mazo.add(new CartaNumerada(6, "azul"));
+        mazo.add(new CartaNumerada(2, "verde"));
+        mazo.add(new CartaNumerada(9, "amarillo"));
+        mazo.add(new CartaNumerada(8, "amarillo"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
+
         return mazo;
     }
 
@@ -34,6 +40,8 @@ public class UnoTests {
         mazo.add(new CartaNumerada(8, "azul"));
         mazo.add(new CartaNumerada(6, "azul"));
         mazo.add(new CartaNumerada(5, "amarillo"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
         return mazo;
     }
 
@@ -49,6 +57,10 @@ public class UnoTests {
         mazo.add(new CartaNumerada(6, "verde"));
         mazo.add(new CartaNumerada(5, "azul"));
         mazo.add(new CartaNumerada(2, "verde"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
+        mazo.add(new CartaNumerada(9, "amarillo"));
+        mazo.add(new CartaNumerada(8, "amarillo"));
         return mazo;
     }
 
@@ -61,6 +73,8 @@ public class UnoTests {
         mazo.add(new CartaNumerada(6, "verde"));
         mazo.add(new CartaNumerada(4, "amarillo"));
         mazo.add(new CartaNumerada(8, "verde"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
         return mazo;
     }
 
@@ -95,6 +109,9 @@ public class UnoTests {
         mazo.add(new CartaNumerada(2, "verde"));
         mazo.add(new CartaNumerada(2, "amarillo"));
         mazo.add(new CartaNumerada(3, "amarillo"));
+        mazo.add(new CartaNumerada(9, "amarillo"));
+        mazo.add(new CartaNumerada(8, "amarillo"));
+
         return mazo;
     }
 
@@ -123,6 +140,8 @@ public class UnoTests {
         mazo.add(new CartaNumerada(4, "amarillo"));
         mazo.add(new CartaNumerada(8, "rojo"));
         mazo.add(new CartaNumerada(6, "azul"));
+        mazo.add(new CartaNumerada(2, "amarillo"));
+        mazo.add(new CartaNumerada(3, "amarillo"));
         return mazo;
     }
 
@@ -147,7 +166,7 @@ public class UnoTests {
         mazo.add(new CartaNumerada(3, "azul"));
         List<String> jugadores = new ArrayList<>();
         jugadores.add("Pepe");
-        assertThrows( RuntimeException.class, () -> new Uno(mazo, jugadores, 2));
+        assertEquals("La partida debe tener 2 o mas jugadores", assertThrows( RuntimeException.class, () -> new Uno(mazo, jugadores, 2)).getMessage());
     }
 
     @Test void TestPrimeraCarta(){
@@ -207,14 +226,15 @@ public class UnoTests {
     }
 
     @Test void tresJugadoresTurnoIncorrecto(){
-        Carta v5 = new CartaNumerada(5, "verde");
-        Carta a7 = new CartaNumerada(7, "amarillo");
+        Carta r5 = new CartaNumerada(5, "rojo");
+        Carta am5 = new CartaNumerada(5, "amarillo");
         Carta a3 = new CartaNumerada(3, "azul");
 
-        assertThrows( RuntimeException.class, () -> new Uno(crearMazo(), crearTresJugadores(), 2)
-                .jugar("Pepe", v5)
-                .jugar("Lolo", a7)
-                .jugar("Pepe", a3));
+        assertEquals("No es el turno de este jugador", assertThrows( RuntimeException.class, () -> new Uno(crearMazo(), crearTresJugadores(), 2)
+                .jugar("Pepe", r5)
+                .jugar("Lolo", am5)
+                .jugar("Pepe", a3))
+                .getMessage());
     }
 
     @Test void cartaSalta() {
@@ -238,9 +258,9 @@ public class UnoTests {
         Carta saltaAzul = new CartaSalta("azul");
         Carta a7 = new CartaNumerada(7, "azul");
 
-        assertThrows( RuntimeException.class, () -> new Uno(crearMazoConSalta(), crearTresJugadores(), 2)
+        assertEquals("No es el turno de este jugador", assertThrows( RuntimeException.class, () -> new Uno(crearMazoConSalta(), crearTresJugadores(), 2)
                 .jugar("Pepe", saltaAzul)
-                .jugar("Lolo", a7));
+                .jugar("Lolo", a7)).getMessage());
     }
 
     @Test void cantidadCartas() {
@@ -262,9 +282,9 @@ public class UnoTests {
         Carta tomaDosAzul = new CartaTomaDos("azul");
         Carta a7 = new CartaNumerada(7, "azul");
 
-        assertThrows( RuntimeException.class, () -> new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
+        assertEquals("No es el turno de este jugador", assertThrows( RuntimeException.class, () -> new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
                 .jugar("Pepe", tomaDosAzul)
-                .jugar("Lolo", a7));
+                .jugar("Lolo", a7)).getMessage());
 
     }
 
@@ -303,9 +323,9 @@ public class UnoTests {
         Carta r5 = new CartaNumerada(5, "rojo");
         Carta a1 = new CartaNumerada(1, "azul");
 
-        assertThrows( RuntimeException.class, () -> new Uno(crearMazo(), crearJugadores(), 2)
+        assertEquals("Esta carta no puede ser apilada al mazo", assertThrows( RuntimeException.class, () -> new Uno(crearMazo(), crearJugadores(), 2)
                 .jugar("Pepe", r5)
-                .jugar("Lolo", a1));
+                .jugar("Lolo", a1)).getMessage());
 
     }
 
@@ -327,19 +347,6 @@ public class UnoTests {
 
     }
 
-    @Test void JugadorApilaSumaDosSobreNumeradaNoHabilitada() {
-        Carta tomaDos = new CartaTomaDos( "azul");
-        Carta a4 = new CartaNumerada(4, "azul");
-
-        assertThrows( RuntimeException.class, () -> new Uno(crearMazoConTomaDos(), crearTresJugadores(), 2)
-                .jugar("Pepe", tomaDos)
-                .jugar("Tata", a4));
-
-
-    }
-
-    // Testear para cada uno de los tipos de cartas (tipo a un +2 apilarle un numero del mismo color
-    // O a un +2 apilarle un salta, etc.)
 
     @Test void JugadorApilaComodinSobreNumerada() {
         Carta comodin = new CartaComodin();
@@ -374,9 +381,9 @@ public class UnoTests {
         Carta a1 = new CartaNumerada(1, "azul");
         Carta comodin = new CartaComodin();
 
-        assertThrows( RuntimeException.class, () -> new Uno(crearMazoConComodin(), crearJugadores(), 2)
+        assertEquals("Esta carta no puede ser apilada al mazo", assertThrows( RuntimeException.class, () -> new Uno(crearMazoConComodin(), crearJugadores(), 2)
                 .jugar("Pepe", comodin.asignarColor("verde"))
-                .jugar("Lolo", a1));
+                .jugar("Lolo", a1)).getMessage());
 
     }
 
@@ -425,37 +432,24 @@ public class UnoTests {
 
     }
 
-    @Test void prueba() {
-        Carta a1 = new CartaNumerada(1, "azul");
-        Carta reversaAzul = new CartaReversa("azul");
-        Carta a7 = new CartaNumerada(7, "azul");
-        assertEquals( "Tata", new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
-                .jugar("Pepe", a1)
-                .jugar("Lolo", reversaAzul)
-                .jugar("Pepe", reversaAzul)
-                .jugar("Lolo", a7)
-                .getJugadorActual()
-                .getNombre());
-    }
 
     @Test void JugadorNoPuedeTirarDosVecesMismaCarta() {
         Carta a1 = new CartaNumerada(1, "azul");
         Carta reversaAzul = new CartaReversa("azul");
 
-        assertThrows(RuntimeException.class, () -> new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
+        assertEquals("El jugador no tiene esa carta", assertThrows(RuntimeException.class, () -> new Uno(crearMazoConReversa(), crearTresJugadores(), 2)
                 .jugar("Pepe", a1)
                 .jugar("Lolo", reversaAzul)
-                .jugar("Pepe", a1));
+                .jugar("Pepe", a1)).getMessage());
 
     }
 
     @Test void TomarCarta() {
         Carta r5 = new CartaNumerada(5, "rojo");
-        Carta reversaAzul = new CartaReversa("azul");
         Carta am5 = new CartaNumerada(5, "amarillo");
 
         assertEquals( 2, new Uno(crearMazo(), crearJugadores(), 2)
-                .jugar("Pepe", r5)
+                .jugarYCantarUno("Pepe", r5)
                 .jugar("Lolo", am5)
                 .tomarCarta("Pepe")
                 .getJugadorActual()
@@ -466,9 +460,28 @@ public class UnoTests {
         Carta r5 = new CartaNumerada(5, "rojo");
 
         assertEquals( true, new Uno(crearMazo(), crearJugadores(), 2)
-                .cantarUnoYJugar("Pepe", r5)
+                .jugarYCantarUno("Pepe", r5)
                 .getJugadorActual().izquierda
                 .getCantoUno());
+    }
+
+    @Test void CantarUnoIncorrectamenteAgarraCartas() {
+        // El comportamiento esperado es que tira la carta (rojo5) pero que al cantar UNO agarra dos.
+        Carta r5 = new CartaNumerada(5, "rojo");
+
+        assertEquals( 4, new Uno(crearMazo(), crearJugadores(), 3)
+                .jugarYCantarUno("Pepe", r5)
+                .getJugadorActual().izquierda
+                .cantidadCartas());
+    }
+
+    @Test void NoCantarUnoCuandoDeberia() {
+        Carta r5 = new CartaNumerada(5, "rojo");
+
+        assertEquals( 3, new Uno(crearMazo(), crearJugadores(), 2)
+                .jugar("Pepe", r5)
+                .getJugadorActual().izquierda
+                .cantidadCartas());
     }
 
     @Test void TomarCartaAnulaCantarUno() {
@@ -476,8 +489,8 @@ public class UnoTests {
         Carta am5 = new CartaNumerada(5, "amarillo");
 
         assertEquals( false, new Uno(crearMazo(), crearJugadores(), 2)
-                .cantarUnoYJugar("Pepe", r5)
-                .cantarUnoYJugar("Lolo", am5)
+                .jugarYCantarUno("Pepe", r5)
+                .jugarYCantarUno("Lolo", am5)
                 .tomarCarta("Pepe")
                 .getJugadorActual()
                 .getCantoUno());
@@ -491,9 +504,9 @@ public class UnoTests {
 
         assertEquals("El Jugador gano el juego",
                 assertThrows(RuntimeException.class, () -> new Uno(crearMazoConReversa(), crearJugadores(), 2)
-                    .cantarUnoYJugar("Pepe", a1)
-                    .cantarUnoYJugar("Lolo", a7)
-                    .jugar("Pepe", reversaAzul))
+                        .jugarYCantarUno("Pepe", a1)
+                        .jugarYCantarUno("Lolo", a7)
+                        .jugar("Pepe", reversaAzul))
                         .getMessage());
     }
 
@@ -505,28 +518,9 @@ public class UnoTests {
         assertEquals("rojo", new Uno(crearMazoRepetidas(), crearJugadores(), 3)
                 .jugar("Pepe", r5)
                 .jugar("Lolo", am5)
-                .cantarUnoYJugar("Pepe", r5)
+                .jugarYCantarUno("Pepe", r5)
                 .getUltimaCarta()
                 .getColor());
     }
-    
-    // agregar test salta para la izquierda
-        // tomaDos testea un comportamiento casi identico, mepa q no haria falta
 
-    // Testear si un jugador tiene dos cartas iguales (podrian ser dos comodines o dos +2 del mismo color. Y si tira una sigue con la otra en mano.
-
-    // Testear las cosas que agregue (lo que esta abajo)
 }
-
-// agregue que el jugador cuando tira una carta no tiene que tener mas esa carta. #TESTEADO
-// hice que pozo sea una carta y no un stack. #asumo que no lleva test
-// cambie la funcion puedeApilarse para que devuelva un boolean. Sirve para poder hacer un stream en el caso de tomarCarta #no se si lleva test
-// Agregue la funcion tomarCarta que se va a llamar en el caso de que un jugador no pueda tirar ninguna carta.
-// Agregue que el jugador puede cantar uno. Lo tiene que hacer solo si le queda una carta. #TESTEADO
-// Si despues de cantar uno agarra una carta (por +2 o xq no tiene para tirar) entonces se le va el UNO que habia cantado. #TESTEADO
-// No se si se podria hacer con polimorfismo lo de cantar UNO, pero no me esta dando la cabeza. #emilio en un mail dijo que no es polimorfico el IF de cantar uno
-// Agregue que si despues de tirar una carta ya no tiene mas y habia cantado 1, entonce gano el juego.
-
-// TESTEAR y revisar Todas estas cosas nuevas.
-
-// faltaria ver los casos donde si un jugador se queda sin cartas pero no canto UNO.

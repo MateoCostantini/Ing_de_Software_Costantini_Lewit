@@ -16,36 +16,51 @@ public class UnoController {
     @Autowired
     UnoService unoService;
 
-//    @GetMapping("/")
-//    public String saludo(){
-//        //return " Estos son las cartas";
-//        return "index";
 
-    @GetMapping( "/hola")
-    public ResponseEntity<String> holaMundo(){
-        return new ResponseEntity<>("Respuesta a hola mundo", HttpStatus.OK);
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegal(IllegalArgumentException exception){
+        return ResponseEntity.badRequest().body(exception.getMessage());
     }
 
-    @PostMapping("newmatch") public ResponseEntity newMatch(@RequestParam List<String> players){
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntime(RuntimeException exception){
+        return ResponseEntity.internalServerError().body(exception.getMessage() );
+    }
+
+
+    @PostMapping("newmatch")
+    public ResponseEntity newMatch(@RequestParam List<String> players){
         return ResponseEntity.ok(unoService.newMatch(players));
     }
+    // curl -X POST "http://localhost:8080/newmatch?players=Lolo&players=Pepe" -H "Accept: application/json"
 
-    @PostMapping("play/{matchId}/{player}") public ResponseEntity play(@PathVariable UUID matchId, @PathVariable String player, @RequestBody JsonCard card) {
+    @PostMapping("play/{matchId}/{player}")
+    public ResponseEntity play(@PathVariable UUID matchId, @PathVariable String player, @RequestBody JsonCard card) {
         unoService.play(matchId, player, card.asCard());
         return ResponseEntity.ok().build();
     }
+    // curl -X POST "http://localhost:8080/play/35655cdd-83cf-4b72-a02e-a4b713c03291/Lolo" -H "Content-Type: Application/json" -d '{"color":"Blue","number":8,"type":"NumberCard","shout":false}'
 
 
-    //@PostMapping("draw/{matchId}/{player}") public ResponseEntity drawCard( @PathVariable UUID matchId, @RequestParam String player ) {}
+    @PostMapping("draw/{matchId}/{player}")
+    public ResponseEntity drawCard( @PathVariable UUID matchId, @PathVariable String player ) {
+        unoService.draw(matchId, player);
+        return ResponseEntity.ok().build();
+    }
+    // POST draw/{matchId}/{player}
 
-    @GetMapping("activecard/{matchId}") public ResponseEntity activeCard( @PathVariable UUID matchId ) {
+    @GetMapping("activecard/{matchId}")
+    public ResponseEntity activeCard( @PathVariable UUID matchId ) {
         return ResponseEntity.ok(unoService.activeCard(matchId).asJson());
     }
+    // curl -X GET "http://localhost:8080/activecard/35655cdd-83cf-4b72-a02e-a4b713c03291" -H "Accept: application/json"
 
-    @GetMapping("playerhand/{matchId}") public ResponseEntity playerHand( @PathVariable UUID matchId ) {
+    @GetMapping("playerhand/{matchId}")
+    public ResponseEntity playerHand( @PathVariable UUID matchId ) {
         return ResponseEntity.ok(unoService.playerHand(matchId).stream().map(each -> each.asJson()));
     }
+    // curl -X GET "http://localhost:8080/playerhand/35655cdd-83cf-4b72-a02e-a4b713c03291" -H "Accept: application/json"
 
-    // Como hay que manejar los errores?
+
 
 }

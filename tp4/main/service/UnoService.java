@@ -37,12 +37,9 @@ public class UnoService {
     }
 
     public void play(UUID matchId, String player, Card card) {
-        Match match = getMatchOrThrow(matchId);
-        match.play(player, card);
-        if (match.isOver()) {
-            sessions.remove(matchId);
-        }
-        // Si termina el juego deberia eliminarlo del diccionario?
+        getMatchOrThrow(matchId).play(player, card);
+        //match.play(player, card);
+
     }
 
     public void draw(UUID matchId, String player) {

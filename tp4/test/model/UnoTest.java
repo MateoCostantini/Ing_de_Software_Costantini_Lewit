@@ -218,6 +218,10 @@ public class UnoTest {
         assertThrowsLike(Match.LessThan2Players, () -> Match.newReducedMatch( deck(), "A" ));
     }
 
+    @Test void testInvalidPlayerName() {
+        assertThrowsLike(Match.NotValidPlayer, () -> Match.newReducedMatch( deck(), "A", "" ));
+    }
+
     private static void assertActiveCard( Match match, Card card) {
         assertActiveCard( match, card, card.color() );
     }

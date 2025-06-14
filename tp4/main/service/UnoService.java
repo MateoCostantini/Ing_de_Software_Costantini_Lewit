@@ -38,7 +38,6 @@ public class UnoService {
 
     public void play(UUID matchId, String player, Card card) {
         getMatchOrThrow(matchId).play(player, card);
-        //match.play(player, card);
 
     }
 
@@ -46,7 +45,6 @@ public class UnoService {
         getMatchOrThrow(matchId).drawCard(player);
     }
 
-    // Hice algo que esta chequeando el color de las cartaaas que se pasan dentor de ColoredCard. Pero que pasa con el wildCard??
 
 
 }

@@ -1,5 +1,6 @@
 package org.udesa.unoback.model;
 
+
 public abstract class Card {
     private boolean uno = false;
 

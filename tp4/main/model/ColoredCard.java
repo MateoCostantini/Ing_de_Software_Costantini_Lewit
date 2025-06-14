@@ -1,11 +1,16 @@
 package org.udesa.unoback.model;
 
 import java.util.Objects;
+import java.util.Set;
 
 public abstract class ColoredCard extends Card {
+    protected Set<String> existingColors = Set.of("Red", "Blue", "Green", "Yellow");
     protected String color = "";
 
     public ColoredCard( String aColor ) {
+        if (!existingColors.contains(aColor)){
+            throw new IllegalArgumentException("El color " + aColor + " no es valido");
+        }
         color = aColor;
     }
     public boolean acceptsOnTop( Card aCard ) { return  aCard.yourColorIs( color() );   }

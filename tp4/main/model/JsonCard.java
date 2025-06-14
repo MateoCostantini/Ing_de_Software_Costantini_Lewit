@@ -12,6 +12,7 @@ public class JsonCard {
 
     public JsonCard() {}
     public JsonCard( String color, Integer number, String type, boolean shout ) {
+
         this.color = color;
         this.number = number;
         this.type = type;
@@ -28,6 +29,7 @@ public class JsonCard {
     }
 
     @SneakyThrows public Card asCard() {
+
         return (Card)Class.forName( "org.udesa.unoback.model." + type )
                 .getMethod( "asCard", getClass() )
                 .invoke( getClass(), this );

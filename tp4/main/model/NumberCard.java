@@ -11,7 +11,11 @@ public class NumberCard extends ColoredCard {
 
     public NumberCard( String aColor, int aNumber ) {
         super( aColor );
-        number = aNumber;
+        if (aNumber < 10 && aNumber >= 0){
+            number = aNumber;
+        }else {
+            throw new IllegalArgumentException("El numero " + aNumber + " no es valido");
+        }
     }
 
     public boolean acceptsOnTop( Card aCard ) { return super.acceptsOnTop( aCard ) || aCard.yourNumberIs( number );}

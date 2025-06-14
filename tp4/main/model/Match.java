@@ -12,6 +12,7 @@ public class Match {
     public static String NotACardInHand = "Not a card in hand of ";
     public static String CardDoNotMatch = "Card does not match Color, Number or Kind";
     public static String LessThan2Players = "There can't be less that 2 players in the match";
+    public static String NotValidPlayer = "This player has not a valid name";
     private Function<GameStatus, GameStatus> reverseShift;
     private Function<GameStatus, GameStatus> nextShift;
     private GameStatus status;
@@ -30,8 +31,15 @@ public class Match {
 
     public Match( List<Card> deck, int cardsInHand, List<String> players ) {
         if (players.size() < 2){
-            throw new RuntimeException(LessThan2Players);
+            throw new IllegalArgumentException(LessThan2Players);
         }
+
+        for ( String player : players ) {
+            if (player == null || player.trim().isEmpty()) {
+                throw new IllegalArgumentException(NotValidPlayer);
+            }
+        }
+
         discardPileHead = deck.remove( 0 );
         nextShift = (status) -> status.right();
         reverseShift = (status) -> status.left();

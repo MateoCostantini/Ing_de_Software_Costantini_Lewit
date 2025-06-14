@@ -14,30 +14,42 @@ public class UnoService {
     private Dealer dealer;
     private Map<UUID, Match> sessions = new HashMap<UUID, Match>();
 
+    private Match getMatchOrThrow(UUID matchId) {
+        Match match = sessions.get(matchId);
+        if (match == null) {
+            throw new IllegalArgumentException("La partida con ID " + matchId + " no existe.");
+        }
+        return match;
+    }
+
     public UUID newMatch(List<String> players) {
         UUID newKey = UUID.randomUUID();
         sessions.put(newKey, Match.fullMatch(dealer.fullDeck(), players));
         return newKey;
-        // esta funcionando si le paso un unico jugador tambien. Deberia?
     }
 
     public List<Card> playerHand(UUID matchId) {
-        return sessions.get(matchId).playerHand();
-        // habria que ver el caso en que te pasan un matchId que no existe.
+        return getMatchOrThrow(matchId).playerHand();
     }
 
     public Card activeCard(UUID matchId) {
-        return sessions.get(matchId).activeCard();
-        // habria que ver el caso en que te pasan un matchId que no existe.
+        return getMatchOrThrow(matchId).activeCard();
     }
 
     public void play(UUID matchId, String player, Card card) {
-        sessions.get(matchId).play(player, card);
-        // Si termina el juego deberia eliminarlo del diccionario.
-        // Si la primera carta es una wildcard no se puede tirar nada q no sea una wildcard. es problema del modelo.
+        Match match = getMatchOrThrow(matchId);
+        match.play(player, card);
+        if (match.isOver()) {
+            sessions.remove(matchId);
+        }
+        // Si termina el juego deberia eliminarlo del diccionario?
     }
 
+    public void draw(UUID matchId, String player) {
+        getMatchOrThrow(matchId).drawCard(player);
+    }
 
-    // deberian estar chequeando en todo momento el estado del juego
+    // Hice algo que esta chequeando el color de las cartaaas que se pasan dentor de ColoredCard. Pero que pasa con el wildCard??
+
 
 }

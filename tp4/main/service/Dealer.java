@@ -3,10 +3,7 @@ package org.udesa.unoback.service;
 import org.springframework.stereotype.Component;
 import org.udesa.unoback.model.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class Dealer {
@@ -18,26 +15,27 @@ public class Dealer {
         deck.addAll( cardsOn("Green"));
         deck.addAll( cardsOn("Yellow"));
 
+        deck.addAll(List.of(new WildCard(), new WildCard(), new WildCard(), new WildCard()));
+
         Collections.shuffle(deck);
-        // genero cartas
-        // mezclo
         return deck;
     }
 
     private List<Card> cardsOn(String color) {
-        return List.of(
-                new WildCard(),
-                new Draw2Card(color),
-                new ReverseCard(color),
-                new SkipCard(color),
-                new NumberCard(color, 1),
-                new NumberCard(color, 2),
-                new NumberCard(color, 3),
-                new NumberCard(color, 4),
-                new NumberCard(color, 5),
-                new NumberCard(color, 6),
-                new NumberCard(color, 7),
-                new NumberCard(color, 8),
-                new NumberCard(color, 9));
+        List<Card> cards = new LinkedList<>();
+        for (int i =1; i <= 9; i++){
+            cards.add(new NumberCard(color, i));
+            cards.add(new NumberCard(color, i));
+        }
+
+        cards.add(new NumberCard(color, 0));
+
+        for (int i=0; i<2; i++){
+            cards.add(new SkipCard(color));
+            cards.add(new Draw2Card(color));
+            cards.add(new ReverseCard(color));
+
+        }
+        return cards;
     }
 }

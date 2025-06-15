@@ -11,7 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.udesa.unoback.controller.UnoController;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.udesa.unoback.service.Dealer;
 
 import java.util.List;
@@ -28,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @SpringBootTest
 public class UnoControllerTest {
-//    @Autowired
-//    UnoController unoController;
+
 
     @Autowired
     MockMvc mockMvc;
@@ -43,6 +43,25 @@ public class UnoControllerTest {
         when(dealer.fullDeck()).thenReturn(UnoServiceTest.fullDeck());
     }
 
+    private ResultActions checkStatusIsOk(MockHttpServletRequestBuilder request) throws Exception {
+        return mockMvc.perform(request)
+                .andExpect(status().isOk());
+    }
+
+    private ResultActions checkStatusBadRequest(MockHttpServletRequestBuilder request) throws Exception {
+        return mockMvc.perform(request)
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    private String checkStatusBadRequestForPlay(MockHttpServletRequestBuilder request, JsonCard card) throws Exception {
+        return mockMvc.perform(request
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(card)))
+                .andDo(print())
+                .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
+    }
+
     private List<JsonCard> activeHand(String uuid) throws Exception {
         String resp = mockMvc.perform(get("/playerhand/" + uuid))
                 .andExpect(status().isOk())
@@ -52,7 +71,6 @@ public class UnoControllerTest {
     }
 
     private String newGame() throws Exception {
-        // Simular la creacion con newMatch
         String resp = mockMvc.perform(post("/newmatch?players=Lolo&players=Pepe"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -65,12 +83,9 @@ public class UnoControllerTest {
         String player1 = "Lolo";
         String player2 = "Pepe";
 
-        String resp = mockMvc.perform(
-                        post("/newmatch")
-                                .param("players", player1)
-                                .param("players", player2)
-                )
-                .andExpect(status().isOk())
+        String resp = checkStatusIsOk(post("/newmatch")
+                .param("players", player1)
+                .param("players", player2))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -82,22 +97,19 @@ public class UnoControllerTest {
 
     }
 
+
+
     @Test void matchWithoutPlayersTest() throws Exception{
-        mockMvc.perform(post("/newmatch"))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        checkStatusBadRequest(post("/newmatch"));
     }
 
     @Test void matchWithInvalidPlayerTest() throws Exception{
         String player1 = "Lolo";
         String player2 = "";
 
-        String resp = mockMvc.perform(
-                        post("/newmatch")
-                                .param("players", player1)
-                                .param("players", player2)
-                )
-                .andExpect(status().isBadRequest())
+        String resp = checkStatusBadRequest(post("/newmatch")
+                .param("players", player1)
+                .param("players", player2))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -109,52 +121,38 @@ public class UnoControllerTest {
         String uuid = newGame();
         assertNotNull(UUID.fromString(uuid));
 
-        mockMvc.perform(get("/activecard/" + uuid))
-                .andDo(print())
-                .andExpect(status().isOk());
+        checkStatusIsOk(get("/activecard/" + uuid));
     }
 
 
     @Test void activeCardInvalidMatchTest() throws Exception {
         UUID invalidUuid = UUID.randomUUID();
 
-        mockMvc.perform(get("/activecard/" + invalidUuid))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        checkStatusBadRequest(get("/activecard/" + invalidUuid));
     }
 
 
     @Test void playerHandTest() throws Exception {
         String uuid = newGame();
         assertNotNull(UUID.fromString(uuid));
-
-        mockMvc.perform(get("/playerhand/" + uuid))
-                .andDo(print())
-                .andExpect(status().isOk());
+        checkStatusIsOk(get("/playerhand/" + uuid));
     }
 
 
     @Test void playerHandInvalidMatchTest() throws Exception {
         UUID invalidUuid = UUID.randomUUID();
-
-        mockMvc.perform(get("/playerhand/" + invalidUuid))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        checkStatusBadRequest(get("/playerhand/" + invalidUuid));
     }
+
+
 
 
     @Test void playWrongTurnTest() throws Throwable{
         String uuid = newGame();
         assertNotNull(UUID.fromString(uuid));
 
-        List<JsonCard> cards = activeHand(uuid);
-
-        String resp = mockMvc.perform(post("/play/" + uuid + "/Pepe")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(cards.getFirst().toString()))
-                .andDo(print())
-                .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
-
+        JsonCard card = activeHand(uuid).getFirst();
+        String resp =  checkStatusBadRequestForPlay(post("/play/" + uuid + "/Pepe"), card);
         assertEquals(Player.NotPlayersTurn + "Pepe", resp);
     }
 
@@ -165,15 +163,10 @@ public class UnoControllerTest {
 
         String fakeColor = "Orange";
         JsonCard wrongCard = new JsonCard(fakeColor, 2, "NumberCard", false);
-
-        String resp = mockMvc.perform(post("/play/" + uuid + "/Lolo")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(wrongCard)))
-                .andDo(print())
-                .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
-
+        String resp = checkStatusBadRequestForPlay(post("/play/" + uuid + "/Lolo"), wrongCard);
         assertEquals("El color " + fakeColor + " no es valido", resp);
     }
+
 
     @Test void playFakeNumberCardTest() throws Exception{
         String uuid = newGame();
@@ -181,15 +174,11 @@ public class UnoControllerTest {
 
         int fakenumber = 999;
         JsonCard wrongCard = new JsonCard("Red", fakenumber, "NumberCard", false);
-
-        String resp = mockMvc.perform(post("/play/" + uuid + "/Lolo")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(wrongCard)))
-                .andDo(print())
-                .andExpect(status().isBadRequest()).andReturn().getResponse().getContentAsString();
-
+        String resp = checkStatusBadRequestForPlay(post("/play/" + uuid + "/Lolo"), wrongCard);
         assertEquals("El numero " + fakenumber + " no es valido", resp);
     }
+
+
 
     @Test void playWithoutCardTest() throws Exception {
         String uuid = newGame();
@@ -201,23 +190,20 @@ public class UnoControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
+
     @Test void drawCardTest() throws Exception {
         String uuid = newGame();
         assertNotNull(UUID.fromString(uuid));
 
-        mockMvc.perform(post("/draw/" + uuid + "/Lolo"))
-                .andExpect(status().isOk());
-
-
+        checkStatusIsOk(post("/draw/" + uuid + "/Lolo"));
     }
+
 
     @Test void drawCardInvalidPlayerTest() throws Exception {
         String uuid = newGame();
         assertNotNull(UUID.fromString(uuid));
 
-        String resp = mockMvc.perform(post("/draw/" + uuid + "/Pepe"))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+        String resp = checkStatusBadRequest(post("/draw/" + uuid + "/Pepe"))
                 .andReturn().getResponse().getContentAsString();
 
         assertEquals(Player.NotPlayersTurn + "Pepe", resp);

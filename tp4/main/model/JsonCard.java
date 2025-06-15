@@ -28,11 +28,19 @@ public class JsonCard {
                "}";
     }
 
-    @SneakyThrows public Card asCard() {
-
-        return (Card)Class.forName( "org.udesa.unoback.model." + type )
-                .getMethod( "asCard", getClass() )
-                .invoke( getClass(), this );
+    public Card asCard() {
+        try {
+            Class<?> clazz = Class.forName("org.udesa.unoback.model." + type);
+            return (Card) clazz.getMethod("asCard", getClass())
+                    .invoke(getClass(), this);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            throw new IllegalArgumentException("Tipo de carta inválido: " + type, e);
+        }catch (Exception e) {
+            if (e.getCause() instanceof RuntimeException cause) {
+                throw (RuntimeException) cause;
+            }
+            throw new RuntimeException(e);
+        }
     }
 }
 

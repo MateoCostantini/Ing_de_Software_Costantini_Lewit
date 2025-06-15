@@ -3,7 +3,6 @@ package org.udesa.unoback.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.udesa.unoback.model.Card;
-import org.udesa.unoback.model.JsonCard;
 import org.udesa.unoback.model.Match;
 
 import java.util.*;
@@ -44,7 +43,5 @@ public class UnoService {
     public void draw(UUID matchId, String player) {
         getMatchOrThrow(matchId).drawCard(player);
     }
-
-
 
 }

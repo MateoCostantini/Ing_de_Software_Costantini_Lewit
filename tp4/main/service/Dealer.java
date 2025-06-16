@@ -15,8 +15,6 @@ public class Dealer {
         deck.addAll( cardsOn("Green"));
         deck.addAll( cardsOn("Yellow"));
 
-        deck.addAll(List.of(new WildCard(), new WildCard(), new WildCard(), new WildCard()));
-
         Collections.shuffle(deck);
         return deck;
     }
@@ -29,6 +27,7 @@ public class Dealer {
         }
 
         cards.add(new NumberCard(color, 0));
+        cards.add(new WildCard());
 
         for (int i=0; i<2; i++){
             cards.add(new SkipCard(color));

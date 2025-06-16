@@ -1,10 +1,7 @@
 package org.udesa.unoback.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
-//@Component
 public abstract class GameStatus {
     protected Player player;
 

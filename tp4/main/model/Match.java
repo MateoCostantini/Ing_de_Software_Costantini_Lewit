@@ -1,13 +1,10 @@
 package org.udesa.unoback.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-//@Service
 public class Match {
     public static String NotACardInHand = "Not a card in hand of ";
     public static String CardDoNotMatch = "Card does not match Color, Number or Kind";
@@ -17,9 +14,7 @@ public class Match {
     private Function<GameStatus, GameStatus> nextShift;
     private GameStatus status;
 
-    //@Autowired
     private Card discardPileHead;
-    //@Autowired
     private List<Card> drawPile;
 
     public static Match newReducedMatch( List<Card> deck, String ... players ) {
